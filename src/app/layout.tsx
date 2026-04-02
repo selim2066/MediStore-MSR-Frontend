@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar} from "@/components/layout/navbar1";
+import { Toaster } from "sonner"
 import { ThemeProvider } from "@/provider/ThemeProvider";
 
 const geistSans = Geist({
@@ -37,10 +38,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
+         
           
           {children}
            {/* <Toaster richColors />  */}
+           <Toaster richColors position="top-right" />
           
         </ThemeProvider>
       </body>
