@@ -2,7 +2,42 @@ import { env } from "@/env"
 import { ApiResponse, Order, OrderWithRelations } from "@/types"
 import { cookies } from "next/headers"
 
+
+
+// ? demo structure 
+//* 
+// async function actionName(input?) {
+//   try {
+   //* 1. Get cookies (auth)
+//     const cookieStore = await cookies()
+
+    //* 2. Call API (method + URL)
+//     const res = await fetch(URL, {
+//       method: "...",
+//       headers: {
+//         "Content-Type": "application/json", // only if needed
+//         Cookie: cookieStore.toString(),
+//       },
+//       body: JSON.stringify(input), // only for POST/PATCH
+//       next: { tags: ["tag-name"] }, // only for GET caching
+//     })
+
+    //* 3. Parse response
+//     const data = await res.json()
+
+    //* 4. Return success
+//     return { data, error: null }
+
+//   } catch (error) {
+   //* 5. Return error
+//     return { data: null, error: { message: "...", details: error } }
+//   }
+// } 
+
+
+
 export const orderService = {
+  //!cookies → fetch → method → headers → body? → json → return
 
   // POST create order — customer only
   createOrder: async (orderData: { shippingAddress: string; items: { medicineId: string; quantity: number }[] }) => {
