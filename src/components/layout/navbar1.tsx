@@ -54,43 +54,38 @@ interface Navbar1Props {
 
 const Navbar = ({
   logo = {
-    url: "https://github.com/selim2066",
+    url: "/",
     src: "/gpt tomato.png",
-    alt: "logo",
-    title: "MediStore-MSR",
+    alt: "MediStore logo",
+    title: "MediStore",
   },
   menu = [
     { title: "Home", url: "/" },
-    {
-      title: "Medicine",
-      url: "/medicine",
-    },
-    { title: "About", url: "/about" },
-    {title:"Dashboard", url:"/dashboard"}
+    { title: "Shop", url: "/shop" },
   ],
   auth = {
     login: { title: "Login", url: "/login" },
-    signup: { title: "Registration", url: "/registration" },
+    signup: { title: "Register", url: "/register" },
   },
   className,
 }: Navbar1Props) => {
   return (
-    <section className={cn("py-4", className)}>
-      <div className="container  mx-auto px-14">
+    <section className={cn("py-4 border-b", className)}>
+      <div className="container mx-auto px-14">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between lg:flex">
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <Link href={logo.url} className="flex items-center gap-2">
               <img
                 src={logo.src}
-                className="max-h-8 dark:invert "
+                className="max-h-8 dark:invert"
                 alt={logo.alt}
               />
               <span className="text-lg font-semibold tracking-tighter">
                 {logo.title}
               </span>
-            </a>
+            </Link>
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
@@ -100,14 +95,14 @@ const Navbar = ({
             </div>
           </div>
 
-          {/* mode/ Sign In/Sign Up Buttons */}
+          {/* Mode / Auth Buttons */}
           <div className="flex gap-2">
             <ModeToggle />
             <Button asChild variant="outline" size="sm">
-              <a href={auth.login.url}>{auth.login.title}</a>
+              <Link href={auth.login.url}>{auth.login.title}</Link>
             </Button>
             <Button asChild size="sm">
-              <a href={auth.signup.url}>{auth.signup.title}</a>
+              <Link href={auth.signup.url}>{auth.signup.title}</Link>
             </Button>
           </div>
         </nav>
@@ -116,13 +111,16 @@ const Navbar = ({
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <Link href={logo.url} className="flex items-center gap-2">
               <img
                 src={logo.src}
                 className="max-h-8 dark:invert"
                 alt={logo.alt}
               />
-            </a>
+              <span className="text-lg font-semibold tracking-tighter">
+                {logo.title}
+              </span>
+            </Link>
 
             <Sheet>
               <SheetTrigger asChild>
@@ -133,18 +131,18 @@ const Navbar = ({
               <SheetContent className="overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle className="flex flex-col gap-5">
-                    <a href={logo.url} className="flex items-center gap-2">
+                    <Link href={logo.url} className="flex items-center gap-2">
                       <img
                         src={logo.src}
                         className="max-h-8 dark:invert"
                         alt={logo.alt}
                       />
-                    </a>
+                    </Link>
                     <ModeToggle />
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 p-4">
-                  {/* home blogs about mobile */}
+                  {/* Nav links mobile */}
                   <Accordion
                     type="single"
                     collapsible
@@ -152,7 +150,8 @@ const Navbar = ({
                   >
                     {menu.map((item) => renderMobileMenuItem(item))}
                   </Accordion>
-                  {/* login signup */}
+
+                  {/* Auth buttons mobile */}
                   <div className="flex flex-col gap-3">
                     <Button asChild variant="outline">
                       <Link href={auth.login.url}>{auth.login.title}</Link>
@@ -171,15 +170,13 @@ const Navbar = ({
   );
 };
 
-// home pricing blog
-
 const renderMenuItem = (item: MenuItem) => {
   return (
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         asChild
         href={item.url}
-        className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground "
+        className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
       >
         <Link href={item.url}>{item.title}</Link>
       </NavigationMenuLink>
@@ -192,7 +189,7 @@ const renderMobileMenuItem = (item: MenuItem) => {
     <Link
       key={item.title}
       href={item.url}
-      className="text-md font-semibold text-amber-600"
+      className="text-md font-semibold"
     >
       {item.title}
     </Link>
