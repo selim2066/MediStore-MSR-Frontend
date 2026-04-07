@@ -131,6 +131,18 @@ export interface ApiResponse<T> {
   data: T
 }
 
+// Paginated response shape for medicines
+export interface PaginatedResponse<T> {
+  meta: {
+    page: number
+    limit: number
+    total_medicine: number
+    totalPages: number
+  }
+  data: T[]
+}
+
+
 
 // ?
 // // What is this?

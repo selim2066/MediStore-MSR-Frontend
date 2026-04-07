@@ -1,5 +1,5 @@
 import { env } from "@/env"
-import { ApiResponse, Medicine, MedicineWithRelations } from "@/types"
+import { ApiResponse, Medicine, MedicineWithRelations, PaginatedResponse } from "@/types"
 import { cookies } from "next/headers"
 
 // Query params for filtering medicines
@@ -46,7 +46,7 @@ export const medicineService = {
       }
 
       const res = await fetch(url.toString(), config)
-      const data: ApiResponse<Medicine[]> = await res.json()
+      const data: ApiResponse<PaginatedResponse<Medicine>> = await res.json()
       return { data, error: null }
     } catch (error) {
       return { data: null, error: { message: "Failed to fetch medicines", details: error } }
