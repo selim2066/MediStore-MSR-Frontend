@@ -21,6 +21,17 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ModeToggle } from "./modeToggle";
+import { useSession, signOut } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { ShoppingCart, User, LogOut, LayoutDashboard, Menu as MenuIcon } from "lucide-react";
+import { useCart } from "@/context/cart-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface MenuItem {
   title: string;
@@ -69,6 +80,15 @@ const Navbar = ({
   },
   className,
 }: Navbar1Props) => {
+  const { data: session } = useSession();
+  const { totalItems } = useCart();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/login");
+  };
+
   return (
     <section className={cn("py-4 border-b", className)}>
       <div className="container mx-auto px-14">
@@ -95,15 +115,77 @@ const Navbar = ({
             </div>
           </div>
 
-          {/* Mode / Auth Buttons */}
-          <div className="flex gap-2">
+          {/* Desktop Mode / Auth Buttons */}
+          <div className="flex gap-2 items-center">
             <ModeToggle />
-            <Button asChild variant="outline" size="sm">
-              <Link href={auth.login.url}>{auth.login.title}</Link>
+
+            {/* Cart */}
+            <Button asChild variant="outline" size="sm" className="relative">
+              <Link href="/cart">
+                <ShoppingCart className="w-4 h-4" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </Link>
             </Button>
-            <Button asChild size="sm">
-              <Link href={auth.signup.url}>{auth.signup.title}</Link>
-            </Button>
+
+            {session ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <User className="w-4 h-4" />
+                    {session.user.name.split(" ")[0]}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {session.user.role === "CUSTOMER" && (
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link href="/orders">My Orders</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/profile">Profile</Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                  {session.user.role === "SELLER" && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/seller/dashboard">
+                        <LayoutDashboard className="w-4 h-4 mr-2" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  {session.user.role === "ADMIN" && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin">
+                        <LayoutDashboard className="w-4 h-4 mr-2" />
+                        Admin Panel
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleSignOut}
+                    className="text-destructive focus:text-destructive cursor-pointer"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button asChild variant="outline" size="sm">
+                  <Link href={auth.login.url}>{auth.login.title}</Link>
+                </Button>
+                <Button asChild size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                  <Link href={auth.signup.url}>{auth.signup.title}</Link>
+                </Button>
+              </>
+            )}
           </div>
         </nav>
 
@@ -122,47 +204,100 @@ const Navbar = ({
               </span>
             </Link>
 
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="size-4" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle className="flex flex-col gap-5">
-                    <Link href={logo.url} className="flex items-center gap-2">
-                      <img
-                        src={logo.src}
-                        className="max-h-8 dark:invert"
-                        alt={logo.alt}
-                      />
-                    </Link>
-                    <ModeToggle />
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col gap-6 p-4">
-                  {/* Nav links mobile */}
-                  <Accordion
-                    type="single"
-                    collapsible
-                    className="flex w-full flex-col gap-4"
-                  >
-                    {menu.map((item) => renderMobileMenuItem(item))}
-                  </Accordion>
+            <div className="flex items-center gap-2">
+              {/* Cart (mobile) */}
+              <Button asChild variant="outline" size="icon" className="relative">
+                <Link href="/cart">
+                  <ShoppingCart className="w-4 h-4" />
+                  {totalItems > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                      {totalItems}
+                    </span>
+                  )}
+                </Link>
+              </Button>
 
-                  {/* Auth buttons mobile */}
-                  <div className="flex flex-col gap-3">
-                    <Button asChild variant="outline">
-                      <Link href={auth.login.url}>{auth.login.title}</Link>
-                    </Button>
-                    <Button asChild>
-                      <Link href={auth.signup.url}>{auth.signup.title}</Link>
-                    </Button>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <Menu className="size-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="overflow-y-auto">
+                  <SheetHeader>
+                    <SheetTitle className="flex flex-col gap-5">
+                      <Link href={logo.url} className="flex items-center gap-2">
+                        <img
+                          src={logo.src}
+                          className="max-h-8 dark:invert"
+                          alt={logo.alt}
+                        />
+                      </Link>
+                      <ModeToggle />
+                    </SheetTitle>
+                  </SheetHeader>
+                  <div className="flex flex-col gap-6 p-4">
+                    {/* Nav links mobile */}
+                    <Accordion
+                      type="single"
+                      collapsible
+                      className="flex w-full flex-col gap-4"
+                    >
+                      {menu.map((item) => renderMobileMenuItem(item))}
+                    </Accordion>
+
+                    {/* Auth buttons mobile */}
+                    {session ? (
+                      <div className="flex flex-col gap-3">
+                        {session.user.role === "CUSTOMER" && (
+                          <>
+                            <Button asChild variant="outline">
+                              <Link href="/orders">My Orders</Link>
+                            </Button>
+                            <Button asChild variant="outline">
+                              <Link href="/profile">Profile</Link>
+                            </Button>
+                          </>
+                        )}
+                        {session.user.role === "SELLER" && (
+                          <Button asChild variant="outline">
+                            <Link href="/seller/dashboard">
+                              <LayoutDashboard className="w-4 h-4 mr-2" />
+                              Dashboard
+                            </Link>
+                          </Button>
+                        )}
+                        {session.user.role === "ADMIN" && (
+                          <Button asChild variant="outline">
+                            <Link href="/admin">
+                              <LayoutDashboard className="w-4 h-4 mr-2" />
+                              Admin Panel
+                            </Link>
+                          </Button>
+                        )}
+                        <Button
+                          variant="destructive"
+                          onClick={handleSignOut}
+                          className="w-full"
+                        >
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign Out
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        <Button asChild variant="outline">
+                          <Link href={auth.login.url}>{auth.login.title}</Link>
+                        </Button>
+                        <Button asChild className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                          <Link href={auth.signup.url}>{auth.signup.title}</Link>
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </div>

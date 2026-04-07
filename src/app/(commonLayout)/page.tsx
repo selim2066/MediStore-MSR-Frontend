@@ -1,15 +1,15 @@
-import { Button } from "@/components/ui/button";
+import { CategoriesSection } from "@/components/module/home/categories-section"
+import { FeaturedMedicinesSection } from "@/components/module/home/featured-medicines-section"
+import { HeroSection } from "@/components/module/home/hero-section"
+import { WhyUsSection } from "@/components/module/home/why-us-section"
 
-
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      
-        <Button variant="outline" className="text-2xl font-bold">Hello my World...</Button>
-      
-      
-      
-    </div>
-  );
+    <main>
+      <HeroSection />
+      <CategoriesSection />
+      <FeaturedMedicinesSection />
+      <WhyUsSection />
+    </main>
+  )
 }
