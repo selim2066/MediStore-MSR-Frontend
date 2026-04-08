@@ -44,3 +44,11 @@ export async function updateOrderStatusAction(id: string, status: string) {
     revalidateTag("seller-orders", "default") // ← and this
   return { data, error: null }
 }
+
+export async function updateAdminOrderStatusAction(id: string, status: string) {
+  const { data, error } = await orderService.updateAdminOrderStatus(id, status);
+  if (error) return { error: error.message };
+  if (!data?.success) return { error: data?.message };
+  revalidateTag("admin-orders", "default");
+  return { success: data.message };
+}

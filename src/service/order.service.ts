@@ -100,7 +100,7 @@ export const orderService = {
   getAllOrders: async () => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${env.API_URL}/admin/orders`, {
+      const res = await fetch(`${env.API_URL}/orders/admin/all`, {
         headers: { Cookie: cookieStore.toString() },
         next: { tags: ["all-orders"] },
       });
@@ -171,24 +171,27 @@ export const orderService = {
     };
   }
 },
-  // updateOrderStatus: async (id: string, status: string) => {
-  //   try {
-  //     const cookieStore = await cookies();
-  //     const res = await fetch(`${env.API_URL}/orders/${id}/status`, {
-  //       method: "PATCH",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Cookie: cookieStore.toString(),
-  //       },
-  //       body: JSON.stringify({ status }),
-  //     });
-  //     const data: ApiResponse<Order> = await res.json();
-  //     return { data, error: null };
-  //   } catch (error) {
-  //     return {
-  //       data: null,
-  //       error: { message: "Failed to update order status", details: error },
-  //     };
-  //   }
-  // },
-};
+// PATCH update order status — admin only
+updateAdminOrderStatus: async (id: string, status: string) => {
+  try {
+    const cookieStore = await cookies();
+    const res = await fetch(`${env.API_URL}/orders/admin/${id}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieStore.toString(),
+      },
+      body: JSON.stringify({ status }),
+    });
+    const data: ApiResponse<Order> = await res.json();
+    return { data, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      error: { message: "Failed to update order status", details: error },
+    };
+  }
+},
+}
+
+
