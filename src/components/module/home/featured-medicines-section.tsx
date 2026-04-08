@@ -1,24 +1,23 @@
-import { medicineService } from "@/service/medicine.service"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { ShoppingCart, Package } from "lucide-react"
-import Link from "next/link"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { medicineService } from "@/service/medicine.service";
+import { ShoppingCart } from "lucide-react";
+import Link from "next/link";
 
 export async function FeaturedMedicinesSection() {
   const { data, error } = await medicineService.getMedicines(
     { limit: "8" },
-    { revalidate: 60 }
-  )
+    { revalidate: 60 },
+  );
 
-  if (error || !data?.data?.data?.length) return null
+  if (error || !data?.data?.data?.length) return null;
 
-  const medicines = data.data.data
+  const medicines = data.data.data;
 
   return (
     <section className="py-16 md:py-24 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4">
-
         {/* Section header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -30,71 +29,67 @@ export async function FeaturedMedicinesSection() {
         </div>
 
         {/* Medicines grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-around mx-10">
           {medicines.map((medicine) => (
+            
+            // Inside your medicines.map...
             <Card
               key={medicine.id}
-              className="group overflow-hidden border border-gray-100 dark:border-gray-800 hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-lg transition-all duration-200"
+              className="group relative bg-white dark:bg-slate-900 border-none shadow-sm hover:shadow-2xl transition-all duration-500 rounded-3xl overflow-hidden"
             >
-              {/* Medicine image */}
-              <div className="relative h-48 bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center overflow-hidden">
-                {medicine.image ? (
-                  <img
-                    src={medicine.image}
-                    alt={medicine.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <Package className="w-16 h-16 text-emerald-300 dark:text-emerald-700" />
-                )}
-                {medicine.stock <= 0 && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <Badge variant="destructive">Out of Stock</Badge>
-                  </div>
-                )}
-              </div>
+              <Link href={`/shop/${medicine.id}`} className="block">
+                <div className="relative aspect-square bg-slate-50 dark:bg-slate-800 m-3 rounded-2xl overflow-hidden">
+                  {medicine.image ? (
+                    <img
+                      src={medicine.image}
+                      alt={medicine.name}
+                      className="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700"
+                    />
+                  ) : (
+                    /* Fallback using one of your existing public files */
+                    <img
+                      src="/medicine01 blue.avif"
+                      alt="Placeholder"
+                      className="w-full h-full object-cover opacity-100 dark:opacity-80 grayscale"
+                    />
+                  )}
 
-              <CardContent className="p-4">
-                <h3 className="font-semibold text-gray-900 dark:text-white truncate mb-1">
-                  {medicine.name}
-                </h3>
-                <p className="text-sm text-muted-foreground truncate mb-3">
+                  <Badge className="absolute top-3 left-3 bg-white/80 backdrop-blur-md text-slate-900 border-none shadow-sm">
+                    {"OTC"}
+                  </Badge>
+                </div>
+              </Link>
+
+              <CardContent className="px-5 pb-2">
+                <p className="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">
                   {medicine.manufacturer}
                 </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                    ৳{medicine.price.toFixed(2)}
+                <h3 className="font-bold text-slate-900 dark:text-white text-lg group-hover:text-emerald-600 transition-colors line-clamp-1">
+                  {medicine.name}
+                </h3>
+                <div className="flex items-baseline gap-2 mt-2">
+                  <span className="text-2xl font-black text-slate-900 dark:text-white">
+                    ৳{medicine.price}
                   </span>
-                  <Badge
-                    variant="secondary"
-                    className="text-xs"
-                  >
-                    Stock: {medicine.stock}
-                  </Badge>
+                  <span className="text-xs text-slate-400 line-through">
+                    ৳{medicine.price + 50}
+                  </span>
                 </div>
               </CardContent>
 
-              <CardFooter className="p-4 pt-0 flex gap-2">
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950"
-                >
-                  <Link href={`/shop/${medicine.id}`}>Details</Link>
-                </Button>
-                <Button
-                  asChild
-                  size="sm"
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
-                  disabled={medicine.stock <= 0}
-                >
-                  <Link href={`/shop/${medicine.id}`}>
-                    <ShoppingCart className="w-4 h-4 mr-1" />
-                    Add
-                  </Link>
-                </Button>
-              </CardFooter>
+            <CardFooter className="px-5 pb-5 pt-3">
+  <Button
+    asChild // CRITICAL: This allows the Button to act as the Link
+    className="w-full bg-slate-900 dark:bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-12 font-bold transition-all cursor-pointer"
+    disabled={medicine.stock <= 0}
+  >
+    {/* This ensures clicking "Quick Add" actually navigates/actions like before */}
+    <Link href={`/shop/${medicine.id}`}>
+      <ShoppingCart className="w-4 h-4 mr-2" />
+      Quick Add
+    </Link>
+  </Button>
+</CardFooter>
             </Card>
           ))}
         </div>
@@ -112,5 +107,5 @@ export async function FeaturedMedicinesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
