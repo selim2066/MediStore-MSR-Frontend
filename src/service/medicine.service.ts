@@ -1,55 +1,66 @@
-import { env } from "@/env"
-import { ApiResponse, Medicine, MedicineWithRelations, PaginatedResponse } from "@/types"
-import { cookies } from "next/headers"
+import { env } from "@/env";
+import {
+  ApiResponse,
+  Medicine,
+  MedicineWithRelations,
+  PaginatedResponse,
+} from "@/types";
+import { cookies } from "next/headers";
 
 // Query params for filtering medicines
 interface GetMedicinesParams {
-  search?: string
-  categoryId?: string
-  manufacturer?: string
-  minPrice?: string
-  maxPrice?: string
-  page?: string
-  limit?: string
+  search?: string;
+  categoryId?: string;
+  manufacturer?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  page?: string;
+  limit?: string;
 }
 
 interface ServiceOptions {
-  cache?: RequestCache
-  revalidate?: number
+  cache?: RequestCache;
+  revalidate?: number;
 }
 
 export const medicineService = {
-
   // GET all medicines — public, used in /shop
-  getMedicines: async (params?: GetMedicinesParams, options?: ServiceOptions) => {
+  getMedicines: async (
+    params?: GetMedicinesParams,
+    options?: ServiceOptions,
+  ) => {
     try {
-      const url = new URL(`${env.API_URL}/medicine`)
+      const url = new URL(`${env.API_URL}/medicine`);
 
       if (params) {
         Object.entries(params).forEach(([key, value]) => {
           if (value !== undefined && value !== null && value !== "") {
-            url.searchParams.append(key, String(value))
+            url.searchParams.append(key, String(value));
           }
-        })
+        });
       }
 
-      const config: RequestInit = {}
+      const config: RequestInit = {};
 
       if (options?.revalidate !== undefined) {
-        config.next = { revalidate: options.revalidate }
+        config.next = { revalidate: options.revalidate };
       }
 
-      config.next = { ...config.next, tags: ["medicines"] }
+      config.next = { ...config.next, tags: ["medicines"] };
 
       if (options?.cache) {
-        config.cache = options.cache
+        config.cache = options.cache;
       }
+      console.log("Fetching:", url.toString());
 
-      const res = await fetch(url.toString(), config)
-      const data: ApiResponse<PaginatedResponse<Medicine>> = await res.json()
-      return { data, error: null }
+      const res = await fetch(url.toString(), config);
+      const data: ApiResponse<PaginatedResponse<Medicine>> = await res.json();
+      return { data, error: null };
     } catch (error) {
-      return { data: null, error: { message: "Failed to fetch medicines", details: error } }
+      return {
+        data: null,
+        error: { message: "Failed to fetch medicines", details: error },
+      };
     }
   },
 
@@ -58,73 +69,138 @@ export const medicineService = {
     try {
       const res = await fetch(`${env.API_URL}/medicine/${id}`, {
         next: { tags: [`medicine-${id}`] },
-      })
-      const data: ApiResponse<MedicineWithRelations> = await res.json()
-      return { data, error: null }
+      });
+      const data: ApiResponse<MedicineWithRelations> = await res.json();
+      return { data, error: null };
     } catch (error) {
-      return { data: null, error: { message: "Failed to fetch medicine", details: error } }
+      return {
+        data: null,
+        error: { message: "Failed to fetch medicine", details: error },
+      };
     }
   },
 
   // GET seller's own medicines — private, used in /seller/medicines
   getSellerMedicines: async () => {
     try {
-      const cookieStore = await cookies()
+      const cookieStore = await cookies();
       const res = await fetch(`${env.API_URL}/medicine/seller`, {
         headers: { Cookie: cookieStore.toString() },
         next: { tags: ["seller-medicines"] },
-      })
-      const data: ApiResponse<Medicine[]> = await res.json()
-      return { data, error: null }
+      });
+      const data: ApiResponse<Medicine[]> = await res.json();
+      return { data, error: null };
     } catch (error) {
-      return { data: null, error: { message: "Failed to fetch seller medicines", details: error } }
+      return {
+        data: null,
+        error: { message: "Failed to fetch seller medicines", details: error },
+      };
     }
   },
+
+  // // POST create medicine — seller only
+  // createMedicine: async (medicineData: FormData) => {
+  //   try {
+  //     const cookieStore = await cookies()
+  //     const res = await fetch(`${env.API_URL}/medicine`, {
+  //       method: "POST",
+  //       headers: { Cookie: cookieStore.toString() },
+  //       body: medicineData,
+  //     })
+  //     const data: ApiResponse<Medicine> = await res.json()
+  //     return { data, error: null }
+  //   } catch (error) {
+  //     return { data: null, error: { message: "Failed to create medicine", details: error } }
+  //   }
+  // },
+
+  // // PUT update medicine — seller only
+  // updateMedicine: async (id: string, medicineData: FormData) => {
+  //   try {
+  //     const cookieStore = await cookies()
+  //     const res = await fetch(`${env.API_URL}/medicine/${id}`, {
+  //       method: "PUT",
+  //       headers: { Cookie: cookieStore.toString() },
+  //       body: medicineData,
+  //     })
+  //     const data: ApiResponse<Medicine> = await res.json()
+  //     return { data, error: null }
+  //   } catch (error) {
+  //     return { data: null, error: { message: "Failed to update medicine", details: error } }
+  //   }
+  // },
+
+  // !cloudinary upload is now handled in the form component, so these methods just take FormData and pass through to backend
 
   // POST create medicine — seller only
   createMedicine: async (medicineData: FormData) => {
     try {
-      const cookieStore = await cookies()
+      const cookieStore = await cookies();
+
+      // Why: FormData was designed for binary file uploads (multipart/form-data).
+      // Now that image is a Cloudinary URL string, the backend expects plain JSON.
+      // Converting FormData → plain object → JSON means Express body-parser
+      // handles it correctly and the image field is preserved.
+      const body = Object.fromEntries(medicineData.entries());
+
       const res = await fetch(`${env.API_URL}/medicine`, {
         method: "POST",
-        headers: { Cookie: cookieStore.toString() },
-        body: medicineData,
-      })
-      const data: ApiResponse<Medicine> = await res.json()
-      return { data, error: null }
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json", // ← tell Express to expect JSON
+        },
+        body: JSON.stringify(body),
+      });
+      const data: ApiResponse<Medicine> = await res.json();
+      return { data, error: null };
     } catch (error) {
-      return { data: null, error: { message: "Failed to create medicine", details: error } }
+      return {
+        data: null,
+        error: { message: "Failed to create medicine", details: error },
+      };
     }
   },
 
   // PUT update medicine — seller only
   updateMedicine: async (id: string, medicineData: FormData) => {
     try {
-      const cookieStore = await cookies()
+      const cookieStore = await cookies();
+
+      const body = Object.fromEntries(medicineData.entries());
+
       const res = await fetch(`${env.API_URL}/medicine/${id}`, {
         method: "PUT",
-        headers: { Cookie: cookieStore.toString() },
-        body: medicineData,
-      })
-      const data: ApiResponse<Medicine> = await res.json()
-      return { data, error: null }
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      const data: ApiResponse<Medicine> = await res.json();
+      return { data, error: null };
     } catch (error) {
-      return { data: null, error: { message: "Failed to update medicine", details: error } }
+      return {
+        data: null,
+        error: { message: "Failed to update medicine", details: error },
+      };
     }
   },
 
   // DELETE medicine — seller only
   deleteMedicine: async (id: string) => {
     try {
-      const cookieStore = await cookies()
+      const cookieStore = await cookies();
       const res = await fetch(`${env.API_URL}/medicine/${id}`, {
         method: "DELETE",
         headers: { Cookie: cookieStore.toString() },
-      })
-      const data: ApiResponse<null> = await res.json()
-      return { data, error: null }
+      });
+      const data: ApiResponse<null> = await res.json();
+      return { data, error: null };
     } catch (error) {
-      return { data: null, error: { message: "Failed to delete medicine", details: error } }
+      return {
+        data: null,
+        error: { message: "Failed to delete medicine", details: error },
+      };
     }
   },
-}
+};

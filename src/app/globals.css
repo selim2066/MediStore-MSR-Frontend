@@ -127,3 +127,22 @@
     @apply font-sans;
   }
 }
+
+/* globals.css — append these */
+@keyframes float-drift {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  33%       { transform: translateY(-10px) rotate(1deg); }
+  66%       { transform: translateY(5px) rotate(-0.5deg); }
+}
+
+@keyframes glitch-a {
+  0%   { clip-path: inset(10% 0 60% 0); transform: translate(-4px,  2px); }
+  50%  { clip-path: inset(50% 0 10% 0); transform: translate(-6px, -2px); }
+  100% { clip-path: inset(30% 0 40% 0); transform: translate(-4px,  1px); }
+}
+
+@keyframes glitch-b {
+  0%   { clip-path: inset(60% 0 10% 0); transform: translate( 4px, -2px); }
+  50%  { clip-path: inset(10% 0 50% 0); transform: translate( 6px,  2px); }
+  100% { clip-path: inset(40% 0 30% 0); transform: translate( 4px, -1px); }
+}

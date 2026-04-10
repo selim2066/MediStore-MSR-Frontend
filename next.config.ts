@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "**",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        // This matches ALL Cloudinary URLs regardless of cloud name or path
+      },
     ],
   },
 };

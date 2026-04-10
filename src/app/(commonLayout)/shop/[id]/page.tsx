@@ -1,4 +1,3 @@
-
 // // import { Badge } from "@/components/ui/badge"
 // // import { Button } from "@/components/ui/button"
 // // import { Package, Star, ArrowLeft } from "lucide-react"
@@ -185,7 +184,7 @@
 //   return (
 //     <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 pb-20">
 //       <div className="container mx-auto px-4 py-10">
-        
+
 //         {/* Back button */}
 //         <Link
 //           href="/shop"
@@ -198,7 +197,7 @@
 //         </Link>
 
 //         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
-          
+
 //           {/* Left Side: Image Gallery Style */}
 //           <div className="lg:col-span-5 space-y-4">
 //             <div className="relative aspect-square bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 flex items-center justify-center overflow-hidden">
@@ -207,7 +206,7 @@
 //                 alt={medicine.name}
 //                 className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal transform hover:scale-105 transition-transform duration-500"
 //               />
-              
+
 //               {/* Trust Badge overlay */}
 //               <div className="absolute top-6 left-6">
 //                 <Badge className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 border-none px-4 py-1.5 backdrop-blur-md font-bold flex gap-2">
@@ -215,7 +214,7 @@
 //                 </Badge>
 //               </div>
 //             </div>
-            
+
 //             {/* Quick trust info */}
 //             <div className="grid grid-cols-3 gap-4">
 //                {[
@@ -269,7 +268,7 @@
 //                   <span className="text-emerald-300 line-through font-medium opacity-80">৳{(medicine.price + 45).toFixed(2)}</span>
 //                 </div>
 //               </div>
-              
+
 //               <div className="flex flex-col items-center md:items-end gap-2">
 //                  <Badge className={`${medicine.stock > 0 ? "bg-white text-emerald-600" : "bg-red-100 text-red-600"} border-none px-6 py-2 rounded-full font-black uppercase text-xs shadow-lg`}>
 //                    {medicine.stock > 0 ? `${medicine.stock} UNITS AVAILABLE` : "Sold Out"}
@@ -359,29 +358,28 @@
 //   )
 // }
 
-import { medicineService } from "@/service/medicine.service"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Package, Star, ArrowLeft } from "lucide-react"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { AddToCartButton } from "@/components/module/shop/add-to-cart-button"
+import { AddToCartButton } from "@/components/module/shop/add-to-cart-button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { medicineService } from "@/service/medicine.service";
+import { ArrowLeft, Package, ShoppingBag, Star } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export default async function MedicineDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params
-  const { data, error } = await medicineService.getMedicineById(id)
+  const { id } = await params;
+  const { data, error } = await medicineService.getMedicineById(id);
 
-  if (error || !data?.data) return notFound()
+  if (error || !data?.data) return notFound();
 
-  const medicine = data.data
+  const medicine = data.data;
 
   return (
-    <div className="container mx-auto px-4 py-10">
-
+    <div className="container mx-auto px-4 py-20">
       {/* Back button */}
       <Link
         href="/shop"
@@ -392,7 +390,6 @@ export default async function MedicineDetailPage({
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16 mx-10">
-
         {/* Image */}
         <div className="h-80 md:h-full min-h-64 bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl flex items-center justify-center overflow-hidden">
           {medicine.image ? (
@@ -442,7 +439,9 @@ export default async function MedicineDetailPage({
               variant={medicine.stock > 0 ? "secondary" : "destructive"}
               className="text-sm"
             >
-              {medicine.stock > 0 ? `${medicine.stock} in stock` : "Out of Stock"}
+              {medicine.stock > 0
+                ? `${medicine.stock} in stock`
+                : "Out of Stock"}
             </Badge>
           </div>
 
@@ -462,10 +461,21 @@ export default async function MedicineDetailPage({
           {/* View cart */}
           <Button
             asChild
+            size="lg"
             variant="outline"
-            className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950"
+            className="
+    h-12 w-full rounded-xl font-semibold text-sm tracking-wide
+    border-2 border-emerald-600 dark:border-emerald-500
+    text-emerald-700 dark:text-emerald-400
+    hover:bg-emerald-50 dark:hover:bg-emerald-950/50
+    active:scale-[0.98] transition-all duration-150
+    shadow-sm
+  "
           >
-            <Link href="/cart">View Cart</Link>
+            <Link href="/cart">
+              <ShoppingBag className="w-4 h-4" />
+              View Cart
+            </Link>
           </Button>
         </div>
       </div>
@@ -516,5 +526,5 @@ export default async function MedicineDetailPage({
         )}
       </div>
     </div>
-  )
+  );
 }
