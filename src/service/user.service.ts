@@ -61,52 +61,76 @@ export const userService = {
     }
   },
 
+  // getCurrentUser: async (cookieHeader?: string) => {
+  //   try {
+  //     const res = await fetch(`${env.API_URL}/api/users/me`, {
+  //       headers: cookieHeader ? { Cookie: cookieHeader } : {},
+  //       credentials: "include",
+  //       cache: "no-store",
+  //     });
+  //     const json = await res.json();
+  //     if (!json.success) return null;
+  //     return json.data as {
+  //       id: string;
+  //       name: string;
+  //       email: string;
+  //       phone?: string;
+  //       address?: string;
+  //       image?: string;
+  //       role: string;
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       data: null,
+  //       error: { message: "Failed to fetch current user", details: error },
+  //     };
+  //   }
+  // },
   getCurrentUser: async (cookieHeader?: string) => {
+  try {
+    const res = await fetch(`${env.API_URL}/users/me`, {
+      headers: cookieHeader ? { Cookie: cookieHeader } : {},
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    const json = await res.json();
+
+    if (!json.success) {
+      return { data: null, error: { message: json.message } };
+    }
+
+    return { data: json.data, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      error: { message: "Failed to fetch current user", details: error },
+    };
+  }
+},
+
+  updateUserProfile: async (
+    data: { name?: string; phone?: string; address?: string; image?: string },
+    cookieHeader?: string,
+  ) => {
     try {
       const res = await fetch(`${env.API_URL}/api/users/me`, {
-        headers: cookieHeader ? { Cookie: cookieHeader } : {},
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+        },
         credentials: "include",
-        cache: "no-store",
+        body: JSON.stringify(data),
       });
       const json = await res.json();
-      if (!json.success) return null;
-      return json.data as {
-        id: string;
-        name: string;
-        email: string;
-        phone?: string;
-        address?: string;
-        image?: string;
-        role: string;
-      };
+      if (!json.success) throw new Error(json.message);
+      return json.data;
     } catch (error) {
       return {
         data: null,
-        error: { message: "Failed to fetch current user", details: error },
+        error: { message: "Failed to update user profile", details: error },
       };
     }
   },
-  updateUserProfile: async (data: { name?: string; phone?: string; address?: string; image?: string },
-  cookieHeader?: string)=>{
-try {
-  const res = await fetch(`${env.API_URL}/api/users/me`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      ...(cookieHeader ? { Cookie: cookieHeader } : {}),
-    },
-    credentials: "include",
-    body: JSON.stringify(data),
-  })
-  const json = await res.json()
-  if (!json.success) throw new Error(json.message)
-  return json.data
-  
-} catch (error) {
-  return {
-    data: null,
-    error: { message: "Failed to update user profile", details: error },
-  };
-}
-  }
-}
+};

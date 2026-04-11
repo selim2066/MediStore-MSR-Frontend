@@ -87,11 +87,11 @@ export function WhyUsSection() {
                 // If appeared: use CSS transition to slide in.
                 hasAppeared 
                   ? "opacity-100 translate-x-0" 
-                  : "opacity-0 translate-x-20"
+                  : "opacity-0 translate-y-20"
               )}
               style={{
                 // Staggered delay using standard CSS transition-delay
-                transitionDelay: `${idx * 150}ms`,
+                transitionDelay: `${idx * 1050}ms`,
                 transitionProperty: "all",
                 transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)"
               }}

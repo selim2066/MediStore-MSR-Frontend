@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { userService } from "@/service/user.service"
 import { redirect } from "next/navigation"
-import { LayoutDashboard, Pill, ShoppingBag, Users, ListOrdered, Tags } from "lucide-react"
+import { LayoutDashboard, Pill, ShoppingBag, Users, ListOrdered, Tags, Home } from "lucide-react"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = await userService.getSession()
@@ -11,18 +11,20 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const isSeller = role === "SELLER"
   const isAdmin = role === "ADMIN"
 
-  const sellerLinks = [
-    { href: "/seller/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/seller/medicines", label: "Medicines", icon: Pill },
-    { href: "/seller/orders", label: "Orders", icon: ShoppingBag },
-  ]
+ const sellerLinks = [
+  { href: "/", label: "Home", icon: Home },
+  { href: "/seller/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/seller/medicines", label: "Medicines", icon: Pill },
+  { href: "/seller/orders", label: "Orders", icon: ShoppingBag },
+]
 
-  const adminLinks = [
-    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/admin/users", label: "Users", icon: Users },
-    { href: "/admin/orders", label: "Orders", icon: ListOrdered },
-    { href: "/admin/categories", label: "Categories", icon: Tags },
-  ]
+const adminLinks = [
+  { href: "/", label: "Home", icon: Home },
+  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/users", label: "Users", icon: Users },
+  { href: "/admin/orders", label: "Orders", icon: ListOrdered },
+  { href: "/admin/categories", label: "Categories", icon: Tags },
+]
 
   const links = isSeller ? sellerLinks : isAdmin ? adminLinks : []
 

@@ -11,18 +11,22 @@ import {
   ShoppingBag,
   Tag,
   Users,
+    Home,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
+
 const sellerLinks = [
+  { href: "/", label: "Home", icon: Home },
   { href: "/seller/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/seller/medicines", label: "Medicines", icon: Pill },
   { href: "/seller/orders", label: "Orders", icon: Package },
 ];
 
 const adminLinks = [
+  { href: "/", label: "Home", icon: Home },
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
