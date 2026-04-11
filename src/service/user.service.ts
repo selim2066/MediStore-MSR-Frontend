@@ -4,15 +4,14 @@ import { cookies } from "next/headers";
 
 export const userService = {
   // GET current session — used in middleware + server components
-getSession: async () => {
+getSession: async (cookieHeader?: string) => {
   try {
-    const cookieStore = await cookies();
-    const cookieHeader = cookieStore.getAll()
-      .map(c => `${c.name}=${c.value}`)
-      .join('; ');
+    const cookieStore = cookieHeader 
+      ? cookieHeader 
+      : (await cookies()).getAll().map(c => `${c.name}=${c.value}`).join('; ');
 
     const res = await fetch(`${env.AUTH_URL}/get-session`, {
-      headers: { Cookie: cookieHeader },
+      headers: { Cookie: cookieStore },
       cache: "no-store",
     });
     const data = await res.json();
@@ -20,7 +19,7 @@ getSession: async () => {
   } catch (error) {
     return {
       data: null,
-      error: { message: "Failed to fetch session {user.service frontend}", details: error },
+      error: { message: "Failed to fetch session", details: error },
     };
   }
 },
