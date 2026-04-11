@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from "next/server"
 import { userService } from "./service/user.service"
 
 export async function proxy(request: NextRequest) {
+  
   const pathname = request.nextUrl.pathname
 
   // Read cookies directly from request
   const cookieHeader = request.headers.get("cookie") || ""
+   console.log("COOKIES:", cookieHeader)
 
   // Fetch current session from backend
   const { data } = await userService.getSession(cookieHeader)
+  console.log("SESSION DATA:", JSON.stringify(data))
 
   const isAuthenticated = !!data?.session
   const role = data?.user?.role // "CUSTOMER" | "SELLER" | "ADMIN"
