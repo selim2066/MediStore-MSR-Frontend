@@ -4,22 +4,26 @@ import { cookies } from "next/headers";
 
 export const userService = {
   // GET current session — used in middleware + server components
-  getSession: async () => {
-    try {
-      const cookieStore = await cookies();
-      const res = await fetch(`${env.AUTH_URL}/get-session`, {
-        headers: { Cookie: cookieStore.toString() },
-        cache: "no-store", // always fresh — never cache session
-      });
-      const data = await res.json();
-      return { data, error: null };
-    } catch (error) {
-      return {
-        data: null,
-        error: { message: "Failed to fetch session", details: error },
-      };
-    }
-  },
+getSession: async () => {
+  try {
+    const cookieStore = await cookies();
+    const cookieHeader = cookieStore.getAll()
+      .map(c => `${c.name}=${c.value}`)
+      .join('; ');
+
+    const res = await fetch(`${env.AUTH_URL}/get-session`, {
+      headers: { Cookie: cookieHeader },
+      cache: "no-store",
+    });
+    const data = await res.json();
+    return { data, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      error: { message: "Failed to fetch session {user.service frontend}", details: error },
+    };
+  }
+},
 
   // GET all users — admin only
   getAllUsers: async () => {
