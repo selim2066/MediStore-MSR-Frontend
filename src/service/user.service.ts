@@ -6,21 +6,22 @@ export const userService = {
   // GET current session — used in middleware + server components
 getSession: async (cookieHeader?: string) => {
   try {
-    const cookieStore = cookieHeader 
-      ? cookieHeader 
-      : (await cookies()).getAll().map(c => `${c.name}=${c.value}`).join('; ');
+    const cookieStore =
+      cookieHeader !== undefined && cookieHeader !== null
+        ? cookieHeader
+        : (await cookies()).getAll().map(c => `${c.name}=${c.value}`).join("; ");
+
+        console.log("getSession cookieStore:....", cookieStore); 
 
     const res = await fetch(`${env.AUTH_URL}/get-session`, {
-      headers: { Cookie: cookieStore },
-      cache: "no-store",
-    });
+  headers: { Cookie: cookieStore },
+  cache: "no-store",
+  signal: AbortSignal.timeout(10000), // 10s max
+});
     const data = await res.json();
     return { data, error: null };
   } catch (error) {
-    return {
-      data: null,
-      error: { message: "Failed to fetch session", details: error },
-    };
+    return { data: null, error: { message: "Failed to fetch session", details: error } };
   }
 },
 
