@@ -1,5 +1,6 @@
 import { orderService } from "@/service/order.service";
 import AdminOrdersClient from "./admin-orders-client";
+export const dynamic = "force-dynamic"
 
 export default async function AdminOrdersPage() {
   const { data, error } = await orderService.getAllOrders();
