@@ -16,7 +16,7 @@ getSession: async (cookieHeader?: string) => {
     const res = await fetch(`${env.AUTH_URL}/get-session`, {
   headers: { Cookie: cookieStore },
   cache: "no-store",
-  signal: AbortSignal.timeout(10000), // 10s max
+  signal: AbortSignal.timeout(35000), // 10s max
 });
     const data = await res.json();
     return { data, error: null };
