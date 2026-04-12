@@ -265,7 +265,7 @@ export async function FeaturedMedicinesSection() {
   const medicines = data.data.data;
 
   return (
-    <section className="py-16 md:py-20 bg-white dark:bg-slate-950 relative overflow-hidden">
+    <section className="py-16 md:py-20 md:px-10 bg-white dark:bg-slate-950 relative overflow-hidden">
       <div
         className="absolute inset-0 opacity-[0.025] dark:opacity-[0.05]"
         style={{
