@@ -12,8 +12,8 @@ export default async function SellerDashboardPage() {
     medicineService.getSellerMedicines(),
     orderService.getSellerOrders(),
   ])
-  console.log("medRes:", JSON.stringify(medRes))
-console.log("orderRes:", JSON.stringify(orderRes))
+//   console.log("medRes:", JSON.stringify(medRes))
+// console.log("orderRes:", JSON.stringify(orderRes))
 
   const medicines = medRes?.data ?? []
   const orders = orderRes?.data ?? []

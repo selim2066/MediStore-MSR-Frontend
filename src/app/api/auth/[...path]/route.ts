@@ -22,9 +22,9 @@ async function handler(request: NextRequest) {
   })
 
   const body = await res.text()
-  console.log("AUTH PROXY status:", res.status)
-  console.log("AUTH PROXY body:", body)
-  console.log("SET-COOKIE:", res.headers.get("set-cookie"))
+  // console.log("AUTH PROXY status: from route : ...", res.status)
+  // console.log("AUTH PROXY body:", body)
+  // console.log("SET-COOKIE: from route", res.headers.get("set-cookie"))
 
   const response = new NextResponse(body, { status: res.status })
 

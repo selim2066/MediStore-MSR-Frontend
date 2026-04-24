@@ -4,8 +4,8 @@ export const dynamic = "force-dynamic"
 
 export default async function AdminOrdersPage() {
   const { data, error } = await orderService.getAllOrders();
-  console.log("data:", data);
-console.log("error:", error?.message, error?.details);
+  //console.log("data:", data);
+//console.log("error:", error?.message, error?.details);
   
   const orders = data?.data ?? [];
 

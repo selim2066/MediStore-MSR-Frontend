@@ -4,11 +4,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ===============================
+   THEME TOKENS
+================================= */
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -17,61 +22,78 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
+
   --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
+
   --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+
   --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+
   --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary-foreground: var(--secondary-foreground);
+
   --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+
   --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
+  --color-popover-foreground: var(--popover-foreground);
+
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
 }
+
+/* ===============================
+   BASE COLORS
+================================= */
 
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
+
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
+
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
+
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
+
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
+
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
+
   --destructive: oklch(0.58 0.22 27);
+
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.809 0.105 251.813);
-  --chart-2: oklch(0.623 0.214 259.815);
-  --chart-3: oklch(0.546 0.245 262.881);
-  --chart-4: oklch(0.488 0.243 264.376);
-  --chart-5: oklch(0.424 0.199 265.638);
+
   --radius: 0.625rem;
+
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -85,27 +107,31 @@
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
+
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
+
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.87 0.00 0);
+
+  --primary: oklch(0.87 0 0);
   --primary-foreground: oklch(0.205 0 0);
+
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
+
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
+
   --accent: oklch(0.371 0 0);
   --accent-foreground: oklch(0.985 0 0);
+
   --destructive: oklch(0.704 0.191 22.216);
+
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.809 0.105 251.813);
-  --chart-2: oklch(0.623 0.214 259.815);
-  --chart-3: oklch(0.546 0.245 262.881);
-  --chart-4: oklch(0.488 0.243 264.376);
-  --chart-5: oklch(0.424 0.199 265.638);
+
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -116,39 +142,61 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* ===============================
+   BASE LAYER
+================================= */
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
 }
 
-/* globals.css — append these */
+/* ===============================
+   ANIMATIONS (CLEAN SINGLE SOURCE)
+================================= */
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes border-spin {
+  to {
+    --angle: 360deg;
+  }
+}
+
 @keyframes float-drift {
   0%, 100% { transform: translateY(0px) rotate(-1deg); }
-  33%       { transform: translateY(-10px) rotate(1deg); }
-  66%       { transform: translateY(5px) rotate(-0.5deg); }
+  33% { transform: translateY(-10px) rotate(1deg); }
+  66% { transform: translateY(5px) rotate(-0.5deg); }
 }
 
 @keyframes glitch-a {
-  0%   { clip-path: inset(10% 0 60% 0); transform: translate(-4px,  2px); }
-  50%  { clip-path: inset(50% 0 10% 0); transform: translate(-6px, -2px); }
-  100% { clip-path: inset(30% 0 40% 0); transform: translate(-4px,  1px); }
+  0% { clip-path: inset(10% 0 60% 0); transform: translate(-4px, 2px); }
+  50% { clip-path: inset(50% 0 10% 0); transform: translate(-6px, -2px); }
+  100% { clip-path: inset(30% 0 40% 0); transform: translate(-4px, 1px); }
 }
 
 @keyframes glitch-b {
-  0%   { clip-path: inset(60% 0 10% 0); transform: translate( 4px, -2px); }
-  50%  { clip-path: inset(10% 0 50% 0); transform: translate( 6px,  2px); }
-  100% { clip-path: inset(40% 0 30% 0); transform: translate( 4px, -1px); }
+  0% { clip-path: inset(60% 0 10% 0); transform: translate(4px, -2px); }
+  50% { clip-path: inset(10% 0 50% 0); transform: translate(6px, 2px); }
+  100% { clip-path: inset(40% 0 30% 0); transform: translate(4px, -1px); }
 }
 
-
-/* ✨ Premium hover glow (subtle) */
+/* ===============================
+   GLASS + GLOW EFFECTS
+================================= */
 
 .glow-hover {
   position: relative;
@@ -160,21 +208,209 @@
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-
-  background: linear-gradient(
-    120deg,
-    #10b981,
-    #06b6d4,
-    #6366f1
-  );
-
+  background: linear-gradient(120deg, #10b981, #06b6d4, #6366f1);
   opacity: 0;
   transition: opacity 0.3s ease;
-
   filter: blur(6px);
   z-index: -1;
 }
 
 .glow-hover:hover::before {
   opacity: 0.6;
+}
+
+/* ===============================
+   BUTTON PRESS SYSTEM
+================================= */
+
+@layer components {
+  .btn-press {
+    @apply transition-all duration-100;
+  }
+
+  .btn-press:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.18);
+  }
+
+  .btn-press-emerald:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.25);
+  }
+}
+
+/* ===============================
+   MEDICINE CARD SYSTEM (GLOBAL)
+================================= */
+
+.med-border-shell {
+  position: relative;
+  padding: 1px;
+  border-radius: 20px;
+  isolation: isolate;
+}
+
+.med-border-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background: conic-gradient(
+    from var(--angle),
+    transparent 65%,
+    var(--c1) 78%,
+    var(--c2) 88%,
+    transparent 100%
+  );
+
+  animation: border-spin 4s linear infinite;
+  opacity: 0.45;
+  transition: opacity 0.4s ease;
+  z-index: 0;
+}
+
+.med-border-shell:hover::before {
+  opacity: 1;
+}
+
+.med-card-lift {
+  position: relative;
+  z-index: 10;
+  transition: transform 0.45s ease, box-shadow 0.45s ease;
+}
+
+.med-border-shell:hover .med-card-lift {
+  transform: translateY(-10px) scale(1.01);
+  box-shadow: 0 32px 64px -12px rgba(0,0,0,0.18);
+}
+
+.med-img-zoom {
+  transition: transform 0.6s ease;
+}
+
+.med-border-shell:hover .med-img-zoom {
+  transform: scale(1.1);
+}
+
+.med-radial-glow {
+  opacity: 0.55;
+  transition: opacity 0.5s ease;
+}
+
+.med-border-shell:hover .med-radial-glow {
+  opacity: 1;
+}
+
+.med-badge-anim {
+  animation: med-badge-pop 0.4s ease forwards;
+}
+
+.med-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* ===============================
+   CTA GLOW BUTTON
+================================= */
+
+.glow-border {
+  position: relative;
+  padding: 1px;
+  border-radius: 14px;
+  display: inline-block;
+}
+
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background: conic-gradient(
+    from var(--angle),
+    transparent 65%,
+    #10b981 80%,
+    #06b6d4 90%,
+    transparent 100%
+  );
+
+  animation: border-spin 4s linear infinite;
+  opacity: 0.6;
+  transition: opacity 0.4s ease;
+}
+
+.glow-border:hover::before {
+  opacity: 1;
+}
+
+.glow-button {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: white;
+  color: #059669;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.dark .glow-button {
+  background: #020810;
+  color: #34d399;
+}
+
+:root {
+  --nav-active-shadow:
+    0 1px 8px rgba(0, 0, 0, 0.12),
+    0 2px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark {
+  --nav-active-shadow:
+    0 1px 8px rgba(0, 0, 0, 0.5),
+    0 2px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.glass-ios {
+  @apply bg-white/10 dark:bg-white/[0.04] backdrop-blur-2xl;
+  @apply border border-white/20 dark:border-white/10;
+  @apply shadow-[0_8px_30px_rgb(0,0,0,0.12)];
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-ios::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.25),
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0)
+  );
+  pointer-events: none;
+}
+
+.glass-ios::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top left,
+    rgba(255,255,255,0.15),
+    transparent 60%
+  );
+  pointer-events: none;
 }

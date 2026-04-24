@@ -11,7 +11,7 @@ getSession: async (cookieHeader?: string) => {
         ? cookieHeader
         : (await cookies()).getAll().map(c => `${c.name}=${c.value}`).join("; ");
 
-        console.log("getSession cookieStore:....", cookieStore); 
+        // console.log("getSession cookieStore (user.service):....", cookieStore); 
 
     const res = await fetch(`${env.AUTH_URL}/get-session`, {
   headers: { Cookie: cookieStore },

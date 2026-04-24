@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner"
 import { ThemeProvider } from "@/provider/ThemeProvider";
 import { CartProvider } from "@/context/cart-context";
+import GlassRipple from "@/components/ui/glass-ripple";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
+      <body suppressHydrationWarning 
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
@@ -37,6 +38,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <CartProvider>
+            <GlassRipple />
             {children}
           </CartProvider>
           <Toaster richColors position="top-right" />

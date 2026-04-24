@@ -7,11 +7,11 @@ export async function proxy(request: NextRequest) {
 
   // Read cookies directly from request
   const cookieHeader = request.headers.get("cookie") || ""
-   console.log("COOKIES:", cookieHeader)
+   //console.log("COOKIES:", cookieHeader)
 
   // Fetch current session from backend
   const { data } = await userService.getSession(cookieHeader)
-  console.log("SESSION DATA:", JSON.stringify(data))
+  //console.log("SESSION DATA:", JSON.stringify(data))
 
   const isAuthenticated = !!data?.session
   const role = data?.user?.role // "CUSTOMER" | "SELLER" | "ADMIN"

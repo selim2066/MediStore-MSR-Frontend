@@ -40,18 +40,31 @@ export const medicineService = {
         });
       }
 
-      const config: RequestInit = {};
+      // const config: RequestInit = {};
 
-      if (options?.revalidate !== undefined) {
-        config.next = { revalidate: options.revalidate };
-      }
+      // if (options?.revalidate !== undefined) {
+      //   config.next = { revalidate: options.revalidate };
+      // }
 
-      config.next = { ...config.next, tags: ["medicines"] };
+      // config.next = { ...config.next, tags: ["medicines"] };
 
-      if (options?.cache) {
-        config.cache = options.cache;
-      }
-      console.log("Fetching:", url.toString());
+      // if (options?.cache) {
+      //   config.cache = options.cache;
+      // }
+      // ✅ REPLACE WITH THIS
+const config: RequestInit = {};
+
+if (options?.cache === "no-store") {
+  config.cache = "no-store";
+} else {
+  config.next = {
+    tags: ["medicines"],
+    ...(options?.revalidate !== undefined && {
+      revalidate: options.revalidate,
+    }),
+  };
+}
+      //console.log("Fetching:", url.toString());
 
       const res = await fetch(url.toString(), config);
       const data: ApiResponse<PaginatedResponse<Medicine>> = await res.json();
