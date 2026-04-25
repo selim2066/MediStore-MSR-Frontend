@@ -6,19 +6,25 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const cookieStore = await cookies();
 
-    const sessionToken =
-      cookieStore.get('__Secure-medistore.session_token')?.value ||
-      cookieStore.get('medistore.session_token')?.value;
+    const secureToken = cookieStore.get('__Secure-medistore.session_token')?.value;
+    const normalToken = cookieStore.get('medistore.session_token')?.value;
+    const sessionToken = secureToken || normalToken;
 
     if (!sessionToken) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
+
+    // Use the correct cookie name when forwarding
+    const cookieName = secureToken
+      ? '__Secure-medistore.session_token'
+      : 'medistore.session_token';
 
     const res = await fetch(`${process.env.BACKEND_URL}/api/payment/init`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-session-token': sessionToken,
+        'x-cookie-name': cookieName, // ← tell backend which name to use
       },
       body: JSON.stringify(body),
     });
