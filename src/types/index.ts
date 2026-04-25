@@ -11,6 +11,14 @@ export type OrderStatus =
   | "DELIVERED"
   | "CANCELLED"
 
+export type PaymentMethod = "COD" | "ONLINE"
+
+export type PaymentStatus =
+  | "PENDING"
+  | "PAID"
+  | "FAILED"
+  | "CANCELLED"
+
 // ============================================
 // USER
 // ============================================
@@ -59,7 +67,6 @@ export interface Medicine {
   updatedAt: string
 }
 
-// Medicine with relations (for detail page)
 export interface MedicineWithRelations extends Medicine {
   seller: User
   category: Category
@@ -74,13 +81,18 @@ export interface Order {
   id: string
   customerId: string
   status: OrderStatus
+
   shippingAddress: string
   totalAmount: number
+
+  paymentMethod: PaymentMethod | null
+  paymentStatus: PaymentStatus | null
+  transactionId: string | null
+
   createdAt: string
   updatedAt: string
 }
 
-// Order with relations (for order detail page)
 export interface OrderWithRelations extends Order {
   customer: User
   items: OrderItemWithRelations[]
@@ -95,7 +107,7 @@ export interface OrderItem {
   orderId: string
   medicineId: string
   quantity: number
-  price: number // snapshot price at purchase time
+  price: number
 }
 
 export interface OrderItemWithRelations extends OrderItem {
@@ -108,7 +120,7 @@ export interface OrderItemWithRelations extends OrderItem {
 
 export interface Review {
   id: string
-  rating: number // 1-5
+  rating: number
   comment: string | null
   customerId: string
   medicineId: string
@@ -124,14 +136,12 @@ export interface ReviewWithRelations extends Review {
 // API RESPONSE
 // ============================================
 
-// Standard response shape from your backend { success, message, data }
 export interface ApiResponse<T> {
   success: boolean
   message: string
   data: T
 }
 
-// Paginated response shape for medicines
 export interface PaginatedResponse<T> {
   meta: {
     page: number

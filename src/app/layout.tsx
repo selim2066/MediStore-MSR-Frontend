@@ -1,10 +1,11 @@
+import GlassRipple from "@/components/ui/glass-ripple";
+import { CartProvider } from "@/context/cart-context";
+import { ThemeProvider } from "@/provider/ThemeProvider";
+import { X } from "lucide-react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
-import { Toaster } from "sonner"
-import { ThemeProvider } from "@/provider/ThemeProvider";
-import { CartProvider } from "@/context/cart-context";
-import GlassRipple from "@/components/ui/glass-ripple";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +19,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "MediStore - MSR",
-  description: "A simple e-commerce website built with Next.js and Tailwind CSS.",
+  description:
+    "A simple e-commerce website built with Next.js and Tailwind CSS.",
 };
 
 export default function RootLayout({
@@ -28,7 +30,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning 
+      <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
@@ -41,7 +44,28 @@ export default function RootLayout({
             <GlassRipple />
             {children}
           </CartProvider>
-          <Toaster richColors position="top-right" />
+          <Toaster
+            position="top-right"
+            richColors
+            expand
+            visibleToasts={3}
+            closeButton
+            duration={4000}
+            offset={16}
+            icons={{
+              close: <X className="w-4 h-4" />,
+            }}
+            toastOptions={{
+              className:
+                "rounded-xl border border-border/50 backdrop-blur-md shadow-lg",
+              classNames: {
+                toast:
+                  "group transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl",
+                closeButton:
+                  "opacity-60 hover:opacity-100 transition cursor-pointer",
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>
