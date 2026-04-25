@@ -18,6 +18,8 @@
 // export const paymentService = { initiatePayment };
 
 // !cross origin solve
+
+
 import Cookies from 'js-cookie';
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -32,7 +34,7 @@ const initiatePayment = async (orderId: string) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(sessionToken && { Cookie: `medistore.session_token=${sessionToken}` }),
+        ...(sessionToken && { 'x-session-token': sessionToken }),
       },
       credentials: 'include',
       body: JSON.stringify({ orderId }),
