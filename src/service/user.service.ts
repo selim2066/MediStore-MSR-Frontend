@@ -1,47 +1,57 @@
 import { env } from "@/env";
-import { ApiResponse, User } from "@/types";
+import { ApiResponse, User, PaginatedResponse } from "@/types";
 import { cookies } from "next/headers";
 
 export const userService = {
   // GET current session — used in middleware + server components
-getSession: async (cookieHeader?: string) => {
-  try {
-    const cookieStore =
-      cookieHeader !== undefined && cookieHeader !== null
-        ? cookieHeader
-        : (await cookies()).getAll().map(c => `${c.name}=${c.value}`).join("; ");
-
-        // console.log("getSession cookieStore (user.service):....", cookieStore); 
-
-    const res = await fetch(`${env.AUTH_URL}/get-session`, {
-  headers: { Cookie: cookieStore },
-  cache: "no-store",
-  signal: AbortSignal.timeout(35000), // 10s max
-});
-    const data = await res.json();
-    return { data, error: null };
-  } catch (error) {
-    return { data: null, error: { message: "Failed to fetch session", details: error } };
-  }
-},
-
-  // GET all users — admin only
-  getAllUsers: async () => {
+  getSession: async (cookieHeader?: string) => {
     try {
-      const cookieStore = await cookies();
-      const res = await fetch(`${env.API_URL}/admin/users`, {
-        headers: { Cookie: cookieStore.toString() },
-        next: { tags: ["all-users"] },
+      const cookieStore =
+        cookieHeader !== undefined && cookieHeader !== null
+          ? cookieHeader
+          : (await cookies())
+              .getAll()
+              .map((c) => `${c.name}=${c.value}`)
+              .join("; ");
+
+      // console.log("getSession cookieStore (user.service):....", cookieStore);
+
+      const res = await fetch(`${env.AUTH_URL}/get-session`, {
+        headers: { Cookie: cookieStore },
+        cache: "no-store",
+        signal: AbortSignal.timeout(35000), // 10s max
       });
-      const data: ApiResponse<User[]> = await res.json();
+      const data = await res.json();
       return { data, error: null };
     } catch (error) {
       return {
         data: null,
-        error: { message: "Failed to fetch users", details: error },
+        error: { message: "Failed to fetch session", details: error },
       };
     }
   },
+
+  // GET all users — admin only
+  getAllUsers: async (params?: { page?: string; limit?: string }) => {
+  try {
+    const cookieStore = await cookies();
+    const url = new URL(`${env.API_URL}/admin/users`);
+    if (params?.page) url.searchParams.set("page", params.page);
+    if (params?.limit) url.searchParams.set("limit", params.limit);
+
+    const res = await fetch(url.toString(), {
+      headers: { Cookie: cookieStore.toString() },
+      next: { tags: ["all-users"] },
+    });
+    const data: ApiResponse<PaginatedResponse<User>> = await res.json();
+    return { data, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      error: { message: "Failed to fetch users", details: error },
+    };
+  }
+},
 
   // PATCH ban/unban user — admin only
   updateUserStatus: async (id: string, isBanned: boolean) => {
@@ -91,27 +101,27 @@ getSession: async (cookieHeader?: string) => {
   //   }
   // },
   getCurrentUser: async (cookieHeader?: string) => {
-  try {
-    const res = await fetch(`${env.API_URL}/users/me`, {
-      headers: cookieHeader ? { Cookie: cookieHeader } : {},
-      credentials: "include",
-      cache: "no-store",
-    });
+    try {
+      const res = await fetch(`${env.API_URL}/users/me`, {
+        headers: cookieHeader ? { Cookie: cookieHeader } : {},
+        credentials: "include",
+        cache: "no-store",
+      });
 
-    const json = await res.json();
+      const json = await res.json();
 
-    if (!json.success) {
-      return { data: null, error: { message: json.message } };
+      if (!json.success) {
+        return { data: null, error: { message: json.message } };
+      }
+
+      return { data: json.data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: { message: "Failed to fetch current user", details: error },
+      };
     }
-
-    return { data: json.data, error: null };
-  } catch (error) {
-    return {
-      data: null,
-      error: { message: "Failed to fetch current user", details: error },
-    };
-  }
-},
+  },
 
   updateUserProfile: async (
     data: { name?: string; phone?: string; address?: string; image?: string },

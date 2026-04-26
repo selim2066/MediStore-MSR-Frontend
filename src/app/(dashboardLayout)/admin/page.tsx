@@ -6,24 +6,29 @@ import { redirect } from "next/navigation"
 import { ShoppingBag, Pill, Users, Tag } from "lucide-react"
 
 export default async function AdminDashboardPage() {
+  
   const { data: session } = await userService.getSession()
   if (!session?.user || session.user.role !== "ADMIN") redirect("/login")
 
   const [{ data: orderRes }, { data: medRes }, { data: catRes }] = await Promise.all([
-    orderService.getAllOrders(),
-    medicineService.getMedicines(),
-    categoryService.getCategories(),
-  ])
+  orderService.getAllOrders({ page: "1", limit: "10" }), // ✅ add params
+  medicineService.getMedicines({ page: "1", limit: "10" }, { cache: "no-store" }), // already had params support
+  categoryService.getCategories(),
+])
 
-  const orders = orderRes?.data ?? []
-  const medicines = medRes?.data?.data ?? []
-  const categories = catRes?.data ?? []
+ const orders = orderRes?.data?.data ?? []
+const medicines = medRes?.data?.data ?? []
+const categories = catRes?.data ?? []
 
-  const stats = [
-    { label: "Total Orders", value: orders.length, icon: ShoppingBag },
-    { label: "Total Medicines", value: medicines.length, icon: Pill },
-    { label: "Total Categories", value: categories.length, icon: Tag },
-  ]
+const totalOrders = orderRes?.data?.meta?.totalOrders ?? orders.length
+const totalMedicines = medRes?.data?.meta?.total_medicine ?? medicines.length
+
+
+ const stats = [
+  { label: "Total Orders", value: totalOrders, icon: ShoppingBag },
+  { label: "Total Medicines", value: totalMedicines, icon: Pill },
+  { label: "Total Categories", value: categories.length, icon: Tag },
+]
 
   return (
     <div className="space-y-6">
