@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { ApiResponse, Order, OrderWithRelations } from "@/types";
+import { ApiResponse, Order, OrderWithRelations, PaginatedResponse } from "@/types";
 import { cookies } from "next/headers";
 
 // ? demo structure
@@ -97,40 +97,49 @@ export const orderService = {
   },
 
   // GET all orders — admin only
-  getAllOrders: async () => {
-    try {
-      const cookieStore = await cookies();
-      const res = await fetch(`${env.API_URL}/orders/admin/all`, {
-        headers: { Cookie: cookieStore.toString() },
-        next: { tags: ["all-orders"] },
-      });
-      const data: ApiResponse<OrderWithRelations[]> = await res.json();
-      return { data, error: null };
-    } catch (error) {
-      return {
-        data: null,
-        error: { message: "Failed to fetch all orders", details: error },
-      };
-    }
-  },
+ // GET all orders — admin only
+getAllOrders: async (params?: { page?: string; limit?: string }) => {
+  try {
+    const cookieStore = await cookies();
+    const url = new URL(`${env.API_URL}/orders/admin/all`);
+    if (params?.page) url.searchParams.set("page", params.page);
+    if (params?.limit) url.searchParams.set("limit", params.limit);
 
-  // GET seller's orders — seller only
-  getSellerOrders: async () => {
-    try {
-      const cookieStore = await cookies();
-      const res = await fetch(`${env.API_URL}/orders/seller`, {
-        headers: { Cookie: cookieStore.toString() },
-        next: { tags: ["seller-orders"] },
-      });
-      const data: ApiResponse<OrderWithRelations[]> = await res.json();
-      return { data, error: null };
-    } catch (error) {
-      return {
-        data: null,
-        error: { message: "Failed to fetch seller orders", details: error },
-      };
-    }
-  },
+    const res = await fetch(url.toString(), {
+      headers: { Cookie: cookieStore.toString() },
+      next: { tags: ["all-orders"] },
+    });
+    const data: ApiResponse<PaginatedResponse<OrderWithRelations>> = await res.json();
+    return { data, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      error: { message: "Failed to fetch all orders", details: error },
+    };
+  }
+},
+
+// GET seller's orders — seller only
+getSellerOrders: async (params?: { page?: string; limit?: string }) => {
+  try {
+    const cookieStore = await cookies();
+    const url = new URL(`${env.API_URL}/orders/seller`);
+    if (params?.page) url.searchParams.set("page", params.page);
+    if (params?.limit) url.searchParams.set("limit", params.limit);
+
+    const res = await fetch(url.toString(), {
+      headers: { Cookie: cookieStore.toString() },
+      next: { tags: ["seller-orders"] },
+    });
+    const data: ApiResponse<PaginatedResponse<OrderWithRelations>> = await res.json();
+    return { data, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      error: { message: "Failed to fetch seller orders", details: error },
+    };
+  }
+},
 
   // PATCH cancel order — customer only, PLACED orders only
   cancelOrder: async (id: string) => {

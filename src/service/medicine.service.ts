@@ -94,22 +94,28 @@ if (options?.cache === "no-store") {
   },
 
   // GET seller's own medicines — private, used in /seller/medicines
-  getSellerMedicines: async () => {
-    try {
-      const cookieStore = await cookies();
-      const res = await fetch(`${env.API_URL}/medicine/seller`, {
-        headers: { Cookie: cookieStore.toString() },
-        next: { tags: ["seller-medicines"] },
-      });
-      const data: ApiResponse<Medicine[]> = await res.json();
-      return { data, error: null };
-    } catch (error) {
-      return {
-        data: null,
-        error: { message: "Failed to fetch seller medicines", details: error },
-      };
-    }
-  },
+ 
+// after
+getSellerMedicines: async (params?: { page?: string; limit?: string }) => {
+  try {
+    const cookieStore = await cookies();
+    const url = new URL(`${env.API_URL}/medicine/seller`);
+    if (params?.page) url.searchParams.set("page", params.page);
+    if (params?.limit) url.searchParams.set("limit", params.limit);
+
+    const res = await fetch(url.toString(), {
+      headers: { Cookie: cookieStore.toString() },
+      next: { tags: ["seller-medicines"] },
+    });
+    const data: ApiResponse<PaginatedResponse<Medicine>> = await res.json();
+    return { data, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      error: { message: "Failed to fetch seller medicines", details: error },
+    };
+  }
+},
 
   createMedicine: async (medicineData: FormData) => {
     try {

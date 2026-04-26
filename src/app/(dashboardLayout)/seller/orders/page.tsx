@@ -2,8 +2,12 @@ import { orderService } from "@/service/order.service"
 import { userService } from "@/service/user.service"
 import { redirect } from "next/navigation"
 import { OrderStatus } from "@/types"
+import { PaginationControls } from "@/components/ui/pagination-controls"
 import UpdateOrderStatus from "@/components/module/seller/update-order-status"
-// import UpdateOrderStatus from "@/components/module/seller/update-order-status"
+
+interface SellerOrdersPageProps {
+  searchParams: Promise<{ page?: string }>
+}
 
 const statusStyles: Record<OrderStatus, string> = {
   PLACED: "bg-blue-100 text-blue-700",
@@ -13,12 +17,21 @@ const statusStyles: Record<OrderStatus, string> = {
   CANCELLED: "bg-red-100 text-red-700",
 }
 
-export default async function SellerOrdersPage() {
+export default async function SellerOrdersPage({ searchParams }: SellerOrdersPageProps) {
   const { data: session } = await userService.getSession()
   if (!session?.user || session.user.role !== "SELLER") redirect("/login")
 
-  const { data: response } = await orderService.getSellerOrders()
-  const orders = response?.data ?? []
+  const { page } = await searchParams
+  const currentPage = Math.max(1, Number(page) || 1)
+
+  const { data: response } = await orderService.getSellerOrders({
+    page: String(currentPage),
+    limit: "5",
+  })
+
+  // PaginatedResponse wraps array under .data
+  const orders = response?.data?.data ?? []
+  const totalPages = response?.data?.meta?.totalPages ?? 1
 
   return (
     <div className="space-y-6">
@@ -58,6 +71,12 @@ export default async function SellerOrdersPage() {
           ))}
         </div>
       )}
+
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        basePath="/seller/orders"
+      />
     </div>
   )
 }

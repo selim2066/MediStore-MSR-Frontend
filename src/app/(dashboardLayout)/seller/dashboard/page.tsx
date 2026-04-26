@@ -15,8 +15,12 @@ export default async function SellerDashboardPage() {
 //   console.log("medRes:", JSON.stringify(medRes))
 // console.log("orderRes:", JSON.stringify(orderRes))
 
-  const medicines = medRes?.data ?? []
-  const orders = orderRes?.data ?? []
+  const medicines = medRes?.data?.data ?? []
+const orders = orderRes?.data?.data ?? []
+
+const totalMedicines = medRes?.data?.meta?.total_medicine ?? medicines.length
+const totalOrders = orderRes?.data?.meta?.totalOrders ?? orders.length
+
 
   const totalRevenue = orders
     .filter((o) => o.status === "DELIVERED")
@@ -26,12 +30,12 @@ export default async function SellerDashboardPage() {
     ["PLACED", "PROCESSING", "SHIPPED"].includes(o.status)
   ).length
 
-  const stats = [
-    { label: "Total Medicines", value: medicines.length, icon: Pill },
-    { label: "Total Orders", value: orders.length, icon: ShoppingBag },
-    { label: "Pending Orders", value: pendingOrders, icon: TrendingUp },
-    { label: "Revenue (Delivered)", value: `৳${totalRevenue.toFixed(2)}`, icon: DollarSign },
-  ]
+ const stats = [
+  { label: "Total Medicines", value: totalMedicines, icon: Pill },
+  { label: "Total Orders", value: totalOrders, icon: ShoppingBag },
+  { label: "Pending Orders", value: pendingOrders, icon: TrendingUp },
+  { label: "Revenue (Delivered)", value: `৳${totalRevenue.toFixed(2)}`, icon: DollarSign },
+]
 
   return (
     <div className="space-y-6">
