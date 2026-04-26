@@ -3,6 +3,7 @@ import { AddToCartButton } from "@/components/module/shop/add-to-cart-button";
 import { MedicineImage } from "@/components/module/shop/medicine-image";
 import { ShopSearchBar } from "@/components/module/shop/shop-search-bar";
 import { Button } from "@/components/ui/button";
+import { PaginationControls } from "@/components/ui/pagination-controls";
 import { categoryService } from "@/service/category.service";
 import { medicineService } from "@/service/medicine.service";
 import { MedicineWithRelations } from "@/types";
@@ -10,15 +11,25 @@ import { Info, PackageSearch } from "lucide-react";
 import Link from "next/link";
 
 interface ShopPageProps {
-  searchParams: Promise<{ categoryId?: string; search?: string }>;
+  searchParams: Promise<{
+    categoryId?: string;
+    search?: string;
+    page?: string;
+  }>;
 }
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
-  const { categoryId, search } = await searchParams;
+  const { categoryId, search, page } = await searchParams;
+  const currentPage = Math.max(1, Number(page) || 1);
 
   const [medicinesRes, categoriesRes] = await Promise.all([
     medicineService.getMedicines(
-      { ...(categoryId && { categoryId }), ...(search && { search }) },
+      {
+        ...(categoryId && { categoryId }),
+        ...(search && { search }),
+        page: String(currentPage),
+        limit: "8",
+      },
       { cache: "no-store" },
     ),
     categoryService.getCategories(),
@@ -27,6 +38,8 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const medicines =
     (medicinesRes.data?.data?.data as MedicineWithRelations[]) || [];
   const categories = categoriesRes.data?.data || [];
+  const meta = medicinesRes.data?.data?.meta;
+  const totalPages = meta?.totalPages ?? 1;
 
   return (
     <div className="relative py-5 lg:py-10 min-h-screen bg-[#f0fdf8] dark:bg-[#020810]">
@@ -150,7 +163,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
               <div className="flex-shrink-0 self-start md:self-end">
                 <div className="inline-flex items-baseline gap-1.5 px-5 py-3 rounded-2xl bg-white/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/50 shadow-sm backdrop-blur-sm">
                   <span className="text-3xl font-black text-slate-900 dark:text-white tabular-nums">
-                    {medicines.length}
+                    {meta?.total_medicine ?? medicines.length}
                   </span>
                   <span className="text-sm font-semibold text-slate-400 dark:text-slate-500">
                     products
@@ -341,6 +354,17 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             </div>
           )}
 
+           {/* Pagination */}
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            basePath="/shop"
+            searchParams={{
+              ...(categoryId && { categoryId }),
+              ...(search && { search }),
+            }}
+          />
+
           {/* Inner bottom-edge highlight */}
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-slate-300/40 dark:via-slate-600/30 to-transparent" />
         </div>
@@ -348,5 +372,3 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     </div>
   );
 }
-
-

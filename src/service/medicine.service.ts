@@ -111,41 +111,6 @@ if (options?.cache === "no-store") {
     }
   },
 
-  // // POST create medicine — seller only
-  // createMedicine: async (medicineData: FormData) => {
-  //   try {
-  //     const cookieStore = await cookies()
-  //     const res = await fetch(`${env.API_URL}/medicine`, {
-  //       method: "POST",
-  //       headers: { Cookie: cookieStore.toString() },
-  //       body: medicineData,
-  //     })
-  //     const data: ApiResponse<Medicine> = await res.json()
-  //     return { data, error: null }
-  //   } catch (error) {
-  //     return { data: null, error: { message: "Failed to create medicine", details: error } }
-  //   }
-  // },
-
-  // // PUT update medicine — seller only
-  // updateMedicine: async (id: string, medicineData: FormData) => {
-  //   try {
-  //     const cookieStore = await cookies()
-  //     const res = await fetch(`${env.API_URL}/medicine/${id}`, {
-  //       method: "PUT",
-  //       headers: { Cookie: cookieStore.toString() },
-  //       body: medicineData,
-  //     })
-  //     const data: ApiResponse<Medicine> = await res.json()
-  //     return { data, error: null }
-  //   } catch (error) {
-  //     return { data: null, error: { message: "Failed to update medicine", details: error } }
-  //   }
-  // },
-
-  // !cloudinary upload is now handled in the form component, so these methods just take FormData and pass through to backend
-
-  // POST create medicine — seller only
   createMedicine: async (medicineData: FormData) => {
     try {
       const cookieStore = await cookies();

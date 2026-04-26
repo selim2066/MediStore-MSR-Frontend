@@ -148,6 +148,7 @@ export interface PaginatedResponse<T> {
     limit: number
     total_medicine: number
     totalPages: number
+    [key: string]: number
   }
   data: T[]
 }
