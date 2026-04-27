@@ -33,6 +33,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ModeToggle } from "./modeToggle";
 import { useTheme } from "next-themes";
+import { Role } from "@/types";
 
 interface MenuItem {
   title: string;
@@ -47,6 +48,21 @@ const NAV_LINKS: MenuItem[] = [
   { title: "Home", url: "/" },
   { title: "Shop", url: "/shop" },
   { title: "Orders", url: "/orders" },
+  { title: "About", url: "/about" },
+];
+
+ const getNavLinks = (role?: Role): MenuItem[] => [
+  { title: "Home", url: "/" },
+  { title: "Shop", url: "/shop" },
+  {
+    title: "Orders",
+    url:
+      role === "ADMIN"
+        ? "/admin/orders"
+        : role === "SELLER"
+        ? "/seller/orders"
+        : "/orders",
+  },
   { title: "About", url: "/about" },
 ];
 
@@ -151,6 +167,8 @@ const Navbar = ({ className }: NavbarProps) => {
   const [mounted, setMounted] = useState(() => false);
   const shouldReduceMotion = useReducedMotion();
 
+ const navLinks = getNavLinks(session?.user.role as Role);
+
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(id);
@@ -219,7 +237,7 @@ const Navbar = ({ className }: NavbarProps) => {
 
             {/* DESKTOP NAV */}
             <nav className="hidden lg:flex items-center gap-0.5">
-              {NAV_LINKS.map((item) => (
+              {navLinks.map((item) => (
                 <NavLink key={item.title} item={item} />
               ))}
             </nav>
@@ -361,7 +379,7 @@ const Navbar = ({ className }: NavbarProps) => {
 
                   {/* NAV LINKS — staggered */}
                   <div className="p-3 space-y-1">
-                    {NAV_LINKS.map((item, i) => (
+                    {navLinks.map((item, i) => (
                       <MobileNavLink
                         key={item.title}
                         item={item}
@@ -376,7 +394,7 @@ const Navbar = ({ className }: NavbarProps) => {
                     className="border-t p-3 space-y-2"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: NAV_LINKS.length * 0.06 + 0.1, duration: 0.3 }}
+                    transition={{ delay: navLinks.length * 0.06 + 0.1, duration: 0.3 }}
                   >
                     {session ? (
                       <>
