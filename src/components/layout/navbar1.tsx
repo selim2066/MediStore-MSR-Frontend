@@ -202,7 +202,7 @@ const Navbar = ({ className }: NavbarProps) => {
             {/* LOGO */}
             <Link href="/" className="flex items-center gap-1 shrink-0">
               <motion.img
-                src="/msr logo 1.png"
+                src="/msr-logo-1.png"
                 className="h-10"
                 whileHover={shouldReduceMotion ? {} : { scale: 1.08, rotate: -4 }}
                 whileTap={{ scale: 0.95 }}
