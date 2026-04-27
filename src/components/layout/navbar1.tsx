@@ -19,6 +19,7 @@ import {
 import { useCart } from "@/context/cart-context";
 import { signOut, useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+import { Role } from "@/types";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ChevronDown,
@@ -32,8 +33,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ModeToggle } from "./modeToggle";
-import { useTheme } from "next-themes";
-import { Role } from "@/types";
 
 interface MenuItem {
   title: string;
@@ -51,7 +50,7 @@ const NAV_LINKS: MenuItem[] = [
   { title: "About", url: "/about" },
 ];
 
- const getNavLinks = (role?: Role): MenuItem[] => [
+const getNavLinks = (role?: Role): MenuItem[] => [
   { title: "Home", url: "/" },
   { title: "Shop", url: "/shop" },
   {
@@ -60,8 +59,8 @@ const NAV_LINKS: MenuItem[] = [
       role === "ADMIN"
         ? "/admin/orders"
         : role === "SELLER"
-        ? "/seller/orders"
-        : "/orders",
+          ? "/seller/orders"
+          : "/orders",
   },
   { title: "About", url: "/about" },
 ];
@@ -75,38 +74,38 @@ export function RouteProgressBar() {
   const rafRef = useRef<number | null>(null);
   const prevPath = useRef(pathname);
 
- useEffect(() => {
-  if (pathname === prevPath.current) return;
-  prevPath.current = pathname;
+  useEffect(() => {
+    if (pathname === prevPath.current) return;
+    prevPath.current = pathname;
 
-  // Cancel any in-flight animations
-  if (timerRef.current) clearTimeout(timerRef.current);
-  if (rafRef.current) cancelAnimationFrame(rafRef.current);
-
-  // ✅ State updates inside rAF — not synchronous in the effect body
-  rafRef.current = requestAnimationFrame(() => {
-    setProgress(0);
-    setVisible(true);
-
-    let p = 0;
-    const climb = () => {
-      p += p < 60 ? 8 : p < 80 ? 3 : 0.5;
-      setProgress(Math.min(p, 80));
-      if (p < 80) rafRef.current = requestAnimationFrame(climb);
-    };
-    rafRef.current = requestAnimationFrame(climb);
-  });
-
-  timerRef.current = setTimeout(() => {
-    setProgress(100);
-    setTimeout(() => setVisible(false), 400);
-  }, 500);
-
-  return () => {
+    // Cancel any in-flight animations
     if (timerRef.current) clearTimeout(timerRef.current);
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
-  };
-}, [pathname]);
+
+    // ✅ State updates inside rAF — not synchronous in the effect body
+    rafRef.current = requestAnimationFrame(() => {
+      setProgress(0);
+      setVisible(true);
+
+      let p = 0;
+      const climb = () => {
+        p += p < 60 ? 8 : p < 80 ? 3 : 0.5;
+        setProgress(Math.min(p, 80));
+        if (p < 80) rafRef.current = requestAnimationFrame(climb);
+      };
+      rafRef.current = requestAnimationFrame(climb);
+    });
+
+    timerRef.current = setTimeout(() => {
+      setProgress(100);
+      setTimeout(() => setVisible(false), 400);
+    }, 500);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [pathname]);
   if (!visible) return null;
 
   return (
@@ -130,13 +129,21 @@ function NavLink({ item }: { item: MenuItem }) {
     item.url === "/" ? pathname === "/" : pathname.startsWith(item.url);
 
   return (
-    <Link href={item.url} className="relative px-3 py-1.5 text-sm rounded-lg group">
+    <Link
+      href={item.url}
+      className="relative px-3 py-1.5 text-sm rounded-lg group"
+    >
       {isActive && (
         <motion.span
           layoutId="nav-active-shadow"
           className="absolute inset-0 rounded-lg bg-background"
-          style={{ boxShadow: "var(--nav-active-shadow)" }}  // ← CSS var, same on server & client
-          transition={{ type: "spring", stiffness: 380, damping: 34, mass: 0.8 }}
+          style={{ boxShadow: "var(--nav-active-shadow)" }} // ← CSS var, same on server & client
+          transition={{
+            type: "spring",
+            stiffness: 380,
+            damping: 34,
+            mass: 0.8,
+          }}
         />
       )}
 
@@ -144,10 +151,14 @@ function NavLink({ item }: { item: MenuItem }) {
         <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-accent/40" />
       )}
 
-      <span className={cn(
-        "relative z-10 transition-colors duration-200",
-        isActive ? "text-foreground font-medium" : "text-muted-foreground group-hover:text-foreground"
-      )}>
+      <span
+        className={cn(
+          "relative z-10 transition-colors duration-200",
+          isActive
+            ? "text-foreground font-medium"
+            : "text-muted-foreground group-hover:text-foreground",
+        )}
+      >
         {item.title}
       </span>
     </Link>
@@ -155,7 +166,6 @@ function NavLink({ item }: { item: MenuItem }) {
 }
 
 export { NavLink };
-
 
 /* ─── Navbar ───────────────────────────────────────────────── */
 const Navbar = ({ className }: NavbarProps) => {
@@ -167,7 +177,7 @@ const Navbar = ({ className }: NavbarProps) => {
   const [mounted, setMounted] = useState(() => false);
   const shouldReduceMotion = useReducedMotion();
 
- const navLinks = getNavLinks(session?.user.role as Role);
+  const navLinks = getNavLinks(session?.user.role as Role);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
@@ -205,7 +215,7 @@ const Navbar = ({ className }: NavbarProps) => {
           scrolled
             ? "bg-background/80 backdrop-blur-xl border-b border-border/60"
             : "bg-transparent border-b border-transparent",
-          className
+          className,
         )}
         animate={{
           boxShadow: scrolled
@@ -216,13 +226,14 @@ const Navbar = ({ className }: NavbarProps) => {
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-2">
           <div className="flex h-16 items-center justify-between gap-4">
-
             {/* LOGO */}
             <Link href="/" className="flex items-center gap-1 shrink-0">
               <motion.img
                 src="/msr-logo-1.png"
                 className="h-10"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.08, rotate: -4 }}
+                whileHover={
+                  shouldReduceMotion ? {} : { scale: 1.08, rotate: -4 }
+                }
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
               />
@@ -247,7 +258,12 @@ const Navbar = ({ className }: NavbarProps) => {
               <ModeToggle />
 
               <motion.div whileTap={{ scale: 0.93 }}>
-                <Button asChild variant="ghost" size="icon" className="relative btn-press">
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="icon"
+                  className="relative btn-press"
+                >
                   <Link href="/cart">
                     <ShoppingCart className="h-4 w-4" />
                     <AnimatePresence>
@@ -257,7 +273,11 @@ const Navbar = ({ className }: NavbarProps) => {
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           exit={{ scale: 0, opacity: 0 }}
-                          transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 22,
+                          }}
                           className="absolute -top-1 -right-1 h-4 w-4 bg-emerald-500 text-white text-[10px] rounded-full flex items-center justify-center"
                         >
                           {totalItems > 9 ? "9+" : totalItems}
@@ -284,7 +304,14 @@ const Navbar = ({ className }: NavbarProps) => {
                       <Link href="/profile">Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/orders">My Orders</Link>
+                      <Link
+                        href={
+                          navLinks.find((l) => l.title === "Orders")?.url ??
+                          "/orders"
+                        }
+                      >
+                        My Orders
+                      </Link>
                     </DropdownMenuItem>
                     {dashboardLink && (
                       <DropdownMenuItem asChild>
@@ -322,7 +349,12 @@ const Navbar = ({ className }: NavbarProps) => {
               <ModeToggle />
 
               <motion.div whileTap={{ scale: 0.93 }}>
-                <Button asChild variant="ghost" size="icon" className="relative btn-press">
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="icon"
+                  className="relative btn-press"
+                >
                   <Link href="/cart">
                     <ShoppingCart className="h-4 w-4" />
                     <AnimatePresence>
@@ -332,7 +364,11 @@ const Navbar = ({ className }: NavbarProps) => {
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           exit={{ scale: 0, opacity: 0 }}
-                          transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 22,
+                          }}
                           className="absolute -top-1 -right-1 h-4 w-4 bg-emerald-500 text-white text-[10px] rounded-full flex items-center justify-center"
                         >
                           {totalItems > 9 ? "9+" : totalItems}
@@ -394,7 +430,10 @@ const Navbar = ({ className }: NavbarProps) => {
                     className="border-t p-3 space-y-2"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: navLinks.length * 0.06 + 0.1, duration: 0.3 }}
+                    transition={{
+                      delay: navLinks.length * 0.06 + 0.1,
+                      duration: 0.3,
+                    }}
                   >
                     {session ? (
                       <>
@@ -424,7 +463,10 @@ const Navbar = ({ className }: NavbarProps) => {
                           </Link>
                         )}
                         <Button
-                          onClick={() => { handleSignOut(); setMobileOpen(false); }}
+                          onClick={() => {
+                            handleSignOut();
+                            setMobileOpen(false);
+                          }}
                           className="w-full mt-2"
                           variant="destructive"
                         >
@@ -436,7 +478,10 @@ const Navbar = ({ className }: NavbarProps) => {
                         <Button asChild className="w-full">
                           <Link href="/login">Login</Link>
                         </Button>
-                        <Button asChild className="w-full bg-emerald-600 text-white btn-press-emerald">
+                        <Button
+                          asChild
+                          className="w-full bg-emerald-600 text-white btn-press-emerald"
+                        >
                           <Link href="/register">Register</Link>
                         </Button>
                       </>
@@ -479,7 +524,7 @@ function MobileNavLink({
           "block px-3 py-2 rounded-lg transition-colors relative",
           isActive
             ? "bg-accent text-foreground font-medium"
-            : "hover:bg-accent/60 text-muted-foreground hover:text-foreground"
+            : "hover:bg-accent/60 text-muted-foreground hover:text-foreground",
         )}
       >
         {item.title}
