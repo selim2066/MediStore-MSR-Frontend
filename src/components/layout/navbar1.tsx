@@ -332,13 +332,13 @@ const Navbar = ({ className }: NavbarProps) => {
                 <div className="flex gap-2">
                   <motion.div whileTap={{ scale: 0.96 }}>
                     <Button asChild variant="ghost" className="btn-press">
-                      <Link href="/login">Login</Link>
+                      <Link href="/login">Login/Registration</Link>
                     </Button>
                   </motion.div>
                   <motion.div whileTap={{ scale: 0.96 }}>
-                    <Button asChild className="bg-emerald-600 text-white">
+                    {/* <Button asChild className="bg-emerald-600 text-white">
                       <Link href="/register">Register</Link>
-                    </Button>
+                    </Button> */}
                   </motion.div>
                 </div>
               )}
@@ -470,20 +470,20 @@ const Navbar = ({ className }: NavbarProps) => {
                           className="w-full mt-2"
                           variant="destructive"
                         >
-                          Sign Out
+                          Log Out
                         </Button>
                       </>
                     ) : (
                       <>
                         <Button asChild className="w-full">
-                          <Link href="/login">Login</Link>
+                          <Link href="/login">Login/Registration</Link>
                         </Button>
-                        <Button
+                        {/* <Button
                           asChild
                           className="w-full bg-emerald-600 text-white btn-press-emerald"
                         >
                           <Link href="/register">Register</Link>
-                        </Button>
+                        </Button> */}
                       </>
                     )}
                   </motion.div>
