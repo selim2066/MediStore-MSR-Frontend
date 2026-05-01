@@ -1,4 +1,4 @@
-// components/navbar1.tsx
+// components/layout/navbar1.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -22,11 +23,14 @@ import { cn } from "@/lib/utils";
 import { Role } from "@/types";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
+  BookOpen,
   ChevronDown,
+  HelpCircle,
   LayoutDashboard,
   LogOut,
   Menu,
   ShoppingCart,
+  User,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -34,25 +38,30 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ModeToggle } from "./modeToggle";
 
+/* ─── Types ──────────────────────────────────────────────────── */
 interface MenuItem {
   title: string;
   url: string;
+  icon?: React.ReactNode;
 }
 
 interface NavbarProps {
   className?: string;
 }
 
-const NAV_LINKS: MenuItem[] = [
-  { title: "Home", url: "/" },
-  { title: "Shop", url: "/shop" },
-  { title: "Orders", url: "/orders" },
+/* ─── Route definitions ──────────────────────────────────────── */
+// Update-1 requirement: 4 routes logged-out, 6 routes logged-in
+
+const LOGGED_OUT_LINKS: MenuItem[] = [
+  { title: "Home",  url: "/" },
+  { title: "Shop",  url: "/shop" },
+  { title: "Blog",  url: "/blog" },
   { title: "About", url: "/about" },
 ];
 
 const getNavLinks = (role?: Role): MenuItem[] => [
-  { title: "Home", url: "/" },
-  { title: "Shop", url: "/shop" },
+  { title: "Home",  url: "/" },
+  { title: "Shop",  url: "/shop" },
   {
     title: "Orders",
     url:
@@ -62,10 +71,12 @@ const getNavLinks = (role?: Role): MenuItem[] => [
           ? "/seller/orders"
           : "/orders",
   },
+  { title: "Blog",  url: "/blog" },
   { title: "About", url: "/about" },
+  { title: "Help",  url: "/help" },
 ];
 
-/* ─── Progress Bar ─────────────────────────────────────────── */
+/* ─── Progress Bar ───────────────────────────────────────────── */
 export function RouteProgressBar() {
   const pathname = usePathname();
   const [progress, setProgress] = useState(0);
@@ -78,11 +89,9 @@ export function RouteProgressBar() {
     if (pathname === prevPath.current) return;
     prevPath.current = pathname;
 
-    // Cancel any in-flight animations
     if (timerRef.current) clearTimeout(timerRef.current);
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
-    // ✅ State updates inside rAF — not synchronous in the effect body
     rafRef.current = requestAnimationFrame(() => {
       setProgress(0);
       setVisible(true);
@@ -106,6 +115,7 @@ export function RouteProgressBar() {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [pathname]);
+
   if (!visible) return null;
 
   return (
@@ -122,9 +132,56 @@ export function RouteProgressBar() {
   );
 }
 
+/* ─── NavAvatar ──────────────────────────────────────────────── */
+// Gradient circle with user initials — shows image if available
+// Used as the profile dropdown trigger
+
+function NavAvatar({
+  name,
+  image,
+  size = "sm",
+}: {
+  name: string;
+  image?: string | null;
+  size?: "sm" | "md";
+}) {
+  const initials = name
+    .split(" ")
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
+  const dim = size === "sm" ? "h-8 w-8 text-xs" : "h-10 w-10 text-sm";
+
+  if (image) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={image}
+        alt={name}
+        className={cn(dim, "rounded-full object-cover ring-2 ring-emerald-500/30")}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        dim,
+        "rounded-full flex items-center justify-center font-semibold text-white",
+        "bg-gradient-to-br from-emerald-500 to-teal-600",
+        "ring-2 ring-emerald-500/30",
+      )}
+    >
+      {initials}
+    </div>
+  );
+}
+
+/* ─── Desktop NavLink ────────────────────────────────────────── */
 function NavLink({ item }: { item: MenuItem }) {
   const pathname = usePathname();
-  // ← no useTheme here anymore
   const isActive =
     item.url === "/" ? pathname === "/" : pathname.startsWith(item.url);
 
@@ -133,41 +190,46 @@ function NavLink({ item }: { item: MenuItem }) {
       href={item.url}
       className="relative px-3 py-1.5 text-sm rounded-lg group"
     >
+      {/* Active pill background */}
       {isActive && (
         <motion.span
           layoutId="nav-active-shadow"
-          className="absolute inset-0 rounded-lg bg-background"
-          style={{ boxShadow: "var(--nav-active-shadow)" }} // ← CSS var, same on server & client
-          transition={{
-            type: "spring",
-            stiffness: 380,
-            damping: 34,
-            mass: 0.8,
-          }}
+          className="absolute inset-0 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/15"
+          transition={{ type: "spring", stiffness: 380, damping: 34, mass: 0.8 }}
         />
       )}
 
+      {/* Hover background */}
       {!isActive && (
         <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-accent/40" />
       )}
 
       <span
         className={cn(
-          "relative z-10 transition-colors duration-200",
+          "relative z-10 transition-colors duration-200 font-medium",
           isActive
-            ? "text-foreground font-medium"
+            ? "text-emerald-600 dark:text-emerald-400"
             : "text-muted-foreground group-hover:text-foreground",
         )}
       >
         {item.title}
       </span>
+
+      {/* Active underline dot */}
+      {isActive && (
+        <motion.span
+          layoutId="nav-active-dot"
+          className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-emerald-500"
+          transition={{ type: "spring", stiffness: 380, damping: 34 }}
+        />
+      )}
     </Link>
   );
 }
 
 export { NavLink };
 
-/* ─── Navbar ───────────────────────────────────────────────── */
+/* ─── Navbar ─────────────────────────────────────────────────── */
 const Navbar = ({ className }: NavbarProps) => {
   const { data: session } = useSession();
   const { totalItems } = useCart();
@@ -177,7 +239,8 @@ const Navbar = ({ className }: NavbarProps) => {
   const [mounted, setMounted] = useState(() => false);
   const shouldReduceMotion = useReducedMotion();
 
-  const navLinks = getNavLinks(session?.user.role as Role);
+  const role = session?.user.role as Role | undefined;
+  const navLinks = session ? getNavLinks(role) : LOGGED_OUT_LINKS;
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
@@ -196,14 +259,13 @@ const Navbar = ({ className }: NavbarProps) => {
   };
 
   const getDashboardLink = () => {
-    if (session?.user.role === "SELLER")
-      return { href: "/seller/dashboard", label: "Seller Dashboard" };
-    if (session?.user.role === "ADMIN")
-      return { href: "/admin", label: "Admin Panel" };
+    if (role === "SELLER") return { href: "/seller/dashboard", label: "Seller Dashboard" };
+    if (role === "ADMIN")  return { href: "/admin",            label: "Admin Panel" };
     return null;
   };
 
   const dashboardLink = getDashboardLink();
+  const ordersUrl = navLinks.find((l) => l.title === "Orders")?.url ?? "/orders";
 
   return (
     <>
@@ -226,19 +288,18 @@ const Navbar = ({ className }: NavbarProps) => {
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-2">
           <div className="flex h-16 items-center justify-between gap-4">
-            {/* LOGO */}
-            <Link href="/" className="flex items-center gap-1 shrink-0">
+
+            {/* ── Logo ─────────────────────────────────────────── */}
+            <Link href="/" className="flex items-center gap-1.5 shrink-0">
               <motion.img
                 src="/msr-logo-1.png"
                 className="h-10"
-                whileHover={
-                  shouldReduceMotion ? {} : { scale: 1.08, rotate: -4 }
-                }
+                whileHover={shouldReduceMotion ? {} : { scale: 1.08, rotate: -4 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
               />
               <motion.span
-                className="font-bold bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-xl text-transparent"
+                className="font-bold text-xl gradient-text"
                 whileHover={{ opacity: 0.85 }}
                 transition={{ duration: 0.15 }}
               >
@@ -246,17 +307,18 @@ const Navbar = ({ className }: NavbarProps) => {
               </motion.span>
             </Link>
 
-            {/* DESKTOP NAV */}
+            {/* ── Desktop nav ──────────────────────────────────── */}
             <nav className="hidden lg:flex items-center gap-0.5">
               {navLinks.map((item) => (
                 <NavLink key={item.title} item={item} />
               ))}
             </nav>
 
-            {/* DESKTOP RIGHT */}
+            {/* ── Desktop right ────────────────────────────────── */}
             <div className="hidden lg:flex items-center gap-2">
               <ModeToggle />
 
+              {/* Cart */}
               <motion.div whileTap={{ scale: 0.93 }}>
                 <Button
                   asChild
@@ -273,12 +335,8 @@ const Navbar = ({ className }: NavbarProps) => {
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           exit={{ scale: 0, opacity: 0 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 500,
-                            damping: 22,
-                          }}
-                          className="absolute -top-1 -right-1 h-4 w-4 bg-emerald-500 text-white text-[10px] rounded-full flex items-center justify-center"
+                          transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                          className="absolute -top-1 -right-1 h-4 w-4 bg-emerald-500 text-white text-[10px] rounded-full flex items-center justify-center font-semibold"
                         >
                           {totalItems > 9 ? "9+" : totalItems}
                         </motion.span>
@@ -288,73 +346,104 @@ const Navbar = ({ className }: NavbarProps) => {
                 </Button>
               </motion.div>
 
-              {/* AUTH */}
+              {/* Auth */}
               {session ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <motion.div whileTap={{ scale: 0.96 }}>
-                      <Button variant="outline" size="sm">
+                    <motion.button
+                      whileTap={{ scale: 0.96 }}
+                      className="flex items-center gap-2 px-2 py-1 rounded-xl
+                        hover:bg-accent/60 transition-colors duration-200 outline-none"
+                    >
+                      <NavAvatar
+                        name={session.user.name}
+                        image={session.user.image}
+                      />
+                      <span className="text-sm font-medium max-w-[80px] truncate hidden xl:block">
                         {session.user.name.split(" ")[0]}
-                        <ChevronDown className="h-3 w-3 ml-1" />
-                      </Button>
-                    </motion.div>
+                      </span>
+                      <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                    </motion.button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+
+                  <DropdownMenuContent align="end" className="w-56 p-2">
+                    {/* User info header */}
+                    <DropdownMenuLabel className="p-0 mb-1">
+                      <div className="flex items-center gap-3 px-2 py-2 rounded-lg bg-emerald-500/5 dark:bg-emerald-500/10">
+                        <NavAvatar
+                          name={session.user.name}
+                          image={session.user.image}
+                          size="md"
+                        />
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold truncate">
+                            {session.user.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {session.user.email}
+                          </p>
+                        </div>
+                      </div>
+                    </DropdownMenuLabel>
+
+                    <DropdownMenuSeparator />
+
                     <DropdownMenuItem asChild>
-                      <Link href="/profile">Profile</Link>
+                      <Link href="/profile" className="flex items-center gap-2 cursor-pointer">
+                        <User className="h-3.5 w-3.5" />
+                        Profile
+                      </Link>
                     </DropdownMenuItem>
+
                     <DropdownMenuItem asChild>
-                      <Link
-                        href={
-                          navLinks.find((l) => l.title === "Orders")?.url ??
-                          "/orders"
-                        }
-                      >
+                      <Link href={ordersUrl} className="flex items-center gap-2 cursor-pointer">
+                        <ShoppingCart className="h-3.5 w-3.5" />
                         My Orders
                       </Link>
                     </DropdownMenuItem>
+
                     {dashboardLink && (
                       <DropdownMenuItem asChild>
-                        <Link href={dashboardLink.href}>
-                          <LayoutDashboard className="h-3 w-3 mr-2" />
+                        <Link href={dashboardLink.href} className="flex items-center gap-2 cursor-pointer">
+                          <LayoutDashboard className="h-3.5 w-3.5" />
                           {dashboardLink.label}
                         </Link>
                       </DropdownMenuItem>
                     )}
+
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut}>
-                      <LogOut className="h-3 w-3 mr-2" />
+
+                    <DropdownMenuItem
+                      onClick={handleSignOut}
+                      className="flex items-center gap-2 text-rose-500 focus:text-rose-500 focus:bg-rose-500/10 cursor-pointer"
+                    >
+                      <LogOut className="h-3.5 w-3.5" />
                       Sign Out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
                 <div className="flex gap-2">
-                  <motion.div whileTap={{ scale: 0.96 }}>
-                    <Button asChild variant="ghost" className="btn-press">
-                      <Link href="/login">Login/Registration</Link>
-                    </Button>
-                  </motion.div>
-                  <motion.div whileTap={{ scale: 0.96 }}>
-                    {/* <Button asChild className="bg-emerald-600 text-white">
-                      <Link href="/register">Register</Link>
-                    </Button> */}
-                  </motion.div>
+                  <Button asChild variant="ghost" size="sm" className="btn-press">
+                    <Link href="/login">Login</Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size="sm"
+                    className="btn-brand px-4"
+                  >
+                    <Link href="/register">Register</Link>
+                  </Button>
                 </div>
               )}
             </div>
 
-            {/* MOBILE */}
-            <div className="flex lg:hidden items-center gap-2">
+            {/* ── Mobile right ─────────────────────────────────── */}
+            <div className="flex lg:hidden items-center gap-1">
               <ModeToggle />
 
               <motion.div whileTap={{ scale: 0.93 }}>
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="icon"
-                  className="relative btn-press"
-                >
+                <Button asChild variant="ghost" size="icon" className="relative btn-press">
                   <Link href="/cart">
                     <ShoppingCart className="h-4 w-4" />
                     <AnimatePresence>
@@ -364,12 +453,8 @@ const Navbar = ({ className }: NavbarProps) => {
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           exit={{ scale: 0, opacity: 0 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 500,
-                            damping: 22,
-                          }}
-                          className="absolute -top-1 -right-1 h-4 w-4 bg-emerald-500 text-white text-[10px] rounded-full flex items-center justify-center"
+                          transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                          className="absolute -top-1 -right-1 h-4 w-4 bg-emerald-500 text-white text-[10px] rounded-full flex items-center justify-center font-semibold"
                         >
                           {totalItems > 9 ? "9+" : totalItems}
                         </motion.span>
@@ -408,13 +493,16 @@ const Navbar = ({ className }: NavbarProps) => {
                   </Button>
                 </SheetTrigger>
 
-                <SheetContent side="right" className="w-72 p-0">
-                  <SheetHeader className="p-4 border-b">
-                    <SheetTitle>MediStore</SheetTitle>
+                <SheetContent side="right" className="w-72 p-0 flex flex-col">
+                  {/* Sheet header */}
+                  <SheetHeader className="p-4 border-b shrink-0">
+                    <SheetTitle className="flex items-center gap-2">
+                      <span className="gradient-text font-bold">MediStore</span>
+                    </SheetTitle>
                   </SheetHeader>
 
-                  {/* NAV LINKS — staggered */}
-                  <div className="p-3 space-y-1">
+                  {/* Nav links */}
+                  <div className="p-3 space-y-1 flex-1 overflow-y-auto">
                     {navLinks.map((item, i) => (
                       <MobileNavLink
                         key={item.title}
@@ -425,66 +513,67 @@ const Navbar = ({ className }: NavbarProps) => {
                     ))}
                   </div>
 
-                  {/* USER SECTION */}
+                  {/* Auth section */}
                   <motion.div
-                    className="border-t p-3 space-y-2"
+                    className="border-t p-3 space-y-2 shrink-0"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: navLinks.length * 0.06 + 0.1,
-                      duration: 0.3,
-                    }}
+                    transition={{ delay: navLinks.length * 0.06 + 0.1, duration: 0.3 }}
                   >
                     {session ? (
                       <>
+                        {/* User info card */}
+                        <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 mb-3">
+                          <NavAvatar
+                            name={session.user.name}
+                            image={session.user.image}
+                            size="md"
+                          />
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold truncate">{session.user.name}</p>
+                            <p className="text-xs text-muted-foreground capitalize">{role?.toLowerCase()}</p>
+                          </div>
+                        </div>
+
                         <Link
                           href="/profile"
-                          className="block px-3 py-2 rounded-lg hover:bg-accent/60 transition-colors"
+                          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent/60 transition-colors text-sm"
                           onClick={() => setMobileOpen(false)}
                         >
+                          <User className="h-4 w-4 text-muted-foreground" />
                           Profile
                         </Link>
-                        {session.user.role === "CUSTOMER" && (
-                          <Link
-                            href="/orders"
-                            className="block px-3 py-2 rounded-lg hover:bg-accent/60 transition-colors"
-                            onClick={() => setMobileOpen(false)}
-                          >
-                            My Orders
-                          </Link>
-                        )}
+
                         {dashboardLink && (
                           <Link
                             href={dashboardLink.href}
-                            className="block px-3 py-2 rounded-lg hover:bg-accent/60 transition-colors"
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent/60 transition-colors text-sm"
                             onClick={() => setMobileOpen(false)}
                           >
+                            <LayoutDashboard className="h-4 w-4 text-muted-foreground" />
                             {dashboardLink.label}
                           </Link>
                         )}
+
                         <Button
-                          onClick={() => {
-                            handleSignOut();
-                            setMobileOpen(false);
-                          }}
-                          className="w-full mt-2"
+                          onClick={() => { handleSignOut(); setMobileOpen(false); }}
+                          className="w-full mt-1"
                           variant="destructive"
+                          size="sm"
                         >
-                          Log Out
+                          <LogOut className="h-3.5 w-3.5 mr-2" />
+                          Sign Out
                         </Button>
                       </>
                     ) : (
-                      <>
-                        <Button asChild className="w-full">
-                          <Link href="/login">Login/Registration</Link>
+                      <div className="flex flex-col gap-2">
+                        <Button asChild variant="outline" className="w-full">
+                          <Link href="/login">Login</Link>
                         </Button>
-                        {/* <Button
-                          asChild
-                          className="w-full bg-emerald-600 text-white btn-press-emerald"
-                        >
+                        <Button asChild className="w-full btn-brand">
                           <Link href="/register">Register</Link>
-                        </Button> */}
-                      </>
+                        </Button>
+                      </div>
                     )}
                   </motion.div>
                 </SheetContent>
@@ -497,7 +586,12 @@ const Navbar = ({ className }: NavbarProps) => {
   );
 };
 
-/* ─── Mobile Nav Link (staggered) ─────────────────────────── */
+/* ─── Mobile Nav Link ────────────────────────────────────────── */
+const MOBILE_ICONS: Record<string, React.ReactNode> = {
+  Blog:   <BookOpen  className="h-4 w-4" />,
+  Help:   <HelpCircle className="h-4 w-4" />,
+};
+
 function MobileNavLink({
   item,
   index,
@@ -510,30 +604,37 @@ function MobileNavLink({
   const pathname = usePathname();
   const isActive =
     item.url === "/" ? pathname === "/" : pathname.startsWith(item.url);
+  const icon = MOBILE_ICONS[item.title];
 
   return (
     <motion.div
       initial={{ opacity: 0, x: 16 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.06, duration: 0.28, ease: "easeOut" }}
+      transition={{ delay: index * 0.05, duration: 0.25, ease: "easeOut" }}
     >
       <Link
         href={item.url}
         onClick={onClose}
         className={cn(
-          "block px-3 py-2 rounded-lg transition-colors relative",
+          "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors relative text-sm",
           isActive
-            ? "bg-accent text-foreground font-medium"
+            ? "bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-medium"
             : "hover:bg-accent/60 text-muted-foreground hover:text-foreground",
         )}
       >
-        {item.title}
+        {/* Active left bar */}
         {isActive && (
           <motion.span
             layoutId="mobile-active-indicator"
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-emerald-500 rounded-full"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-emerald-500 rounded-full"
           />
         )}
+        {icon && (
+          <span className={isActive ? "text-emerald-500" : "text-muted-foreground"}>
+            {icon}
+          </span>
+        )}
+        {item.title}
       </Link>
     </motion.div>
   );
