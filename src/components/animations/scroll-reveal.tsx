@@ -17,6 +17,7 @@ interface ScrollRevealProps {
   start?: string
   // If true, animates the wrapper itself instead of its children
   self?: boolean
+  delay?: number;
 }
 
 export function ScrollReveal({
