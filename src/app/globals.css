@@ -414,3 +414,225 @@
   );
   pointer-events: none;
 }
+
+/* upgrade 001 */
+/* ================================================================
+   STEP 1 — DESIGN SYSTEM ADDITIONS
+   Add this block at the END of your existing globals.css
+   Everything below is NEW — do not duplicate existing rules
+================================================================ */
+
+/* ─── 1. Brand color tokens ──────────────────────────────────────
+   Overwrites shadcn default grey primary with emerald.
+   --brand-*  → use in components instead of hardcoding #10b981
+   --glow-*   → for box-shadow / drop-shadow glow effects
+   --surface-* → layered surface system for cards/modals/sidebars
+──────────────────────────────────────────────────────────────── */
+
+:root {
+  --primary:              oklch(0.696 0.17 162);
+  --primary-foreground:   oklch(1 0 0);
+
+  --brand:                #10b981;
+  --brand-light:          #34d399;
+  --brand-dark:           #059669;
+  --brand-dim:            rgba(16, 185, 129, 0.12);
+  --brand-border:         rgba(16, 185, 129, 0.25);
+
+  --accent-cyan:          #06b6d4;
+  --accent-cyan-dim:      rgba(6, 182, 212, 0.12);
+
+  --glow-brand:           0 0 24px rgba(16,185,129,0.35), 0 0 48px rgba(16,185,129,0.15);
+  --glow-brand-sm:        0 0 12px rgba(16,185,129,0.3);
+  --glow-cyan:            0 0 24px rgba(6,182,212,0.3);
+
+  --surface-0:            oklch(1 0 0);
+  --surface-1:            oklch(0.985 0 0);
+  --surface-2:            oklch(0.97 0 0);
+  --surface-3:            oklch(0.94 0 0);
+
+  --text-display:         clamp(2.5rem, 5vw + 1rem, 5rem);
+  --text-h1:              clamp(2rem, 4vw + 0.5rem, 3.5rem);
+  --text-h2:              clamp(1.5rem, 3vw + 0.25rem, 2.5rem);
+  --text-h3:              clamp(1.125rem, 2vw, 1.5rem);
+
+  --section-py:           clamp(4rem, 8vw, 7rem);
+  --section-px:           clamp(1rem, 4vw, 2rem);
+  --container-max:        1280px;
+
+  --radius:               0.75rem;
+  --radius-card:          1.25rem;
+  --radius-pill:          9999px;
+}
+
+.dark {
+  --primary:              oklch(0.75 0.17 162);
+  --primary-foreground:   oklch(0.1 0 0);
+
+  --surface-0:            oklch(0.09 0 0);
+  --surface-1:            oklch(0.13 0 0);
+  --surface-2:            oklch(0.17 0 0);
+  --surface-3:            oklch(0.21 0 0);
+
+  --card:                 var(--surface-1);
+  --popover:              var(--surface-2);
+  --background:           var(--surface-0);
+}
+
+/* ─── 2. Typography utilities ────────────────────────────────────*/
+
+.gradient-text {
+  background: linear-gradient(135deg, #10b981 0%, #06b6d4 60%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-warm {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 0.75rem;
+}
+
+.section-eyebrow::before,
+.section-eyebrow::after {
+  content: "";
+  display: block;
+  height: 1px;
+  width: 24px;
+  background: var(--brand);
+  opacity: 0.6;
+}
+
+/* ─── 3. Section layout utilities ────────────────────────────────*/
+
+.section-container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--section-px);
+}
+
+.section-py {
+  padding-block: var(--section-py);
+}
+
+/* ─── 4. Grid background ─────────────────────────────────────────*/
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(16,185,129,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16,185,129,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.dark .grid-bg {
+  background-image:
+    linear-gradient(rgba(16,185,129,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16,185,129,0.06) 1px, transparent 1px);
+}
+
+/* ─── 5. Card system ─────────────────────────────────────────────*/
+
+.card-base {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card-base:hover {
+  border-color: var(--brand-border);
+  box-shadow: var(--glow-brand-sm);
+  transform: translateY(-2px);
+}
+
+.dark .card-base {
+  background: var(--surface-1);
+  border-color: oklch(1 0 0 / 8%);
+}
+
+.dark .card-base:hover {
+  border-color: var(--brand-border);
+}
+
+/* ─── 6. Brand button ────────────────────────────────────────────*/
+
+.btn-brand {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  border: none;
+  transition: box-shadow 0.3s ease, transform 0.15s ease;
+}
+
+.btn-brand:hover {
+  box-shadow: var(--glow-brand);
+  transform: translateY(-1px);
+}
+
+.btn-brand:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+/* ─── 7. Ambient orbs ────────────────────────────────────────────*/
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.dark .orb { opacity: 0.25; }
+
+.orb-emerald { background: radial-gradient(circle, #10b981, transparent 70%); }
+.orb-cyan    { background: radial-gradient(circle, #06b6d4, transparent 70%); }
+.orb-purple  { background: radial-gradient(circle, #6366f1, transparent 70%); }
+
+/* ─── 8. Skeleton loader ─────────────────────────────────────────*/
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-2) 25%,
+    var(--surface-3) 50%,
+    var(--surface-2) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-card);
+}
+
+/* ─── 9. Scrollbar ───────────────────────────────────────────────*/
+
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: var(--brand-border); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand); }
+
+/* ─── 10. Selection ──────────────────────────────────────────────*/
+
+::selection {
+  background: rgba(16, 185, 129, 0.25);
+  color: inherit;
+}

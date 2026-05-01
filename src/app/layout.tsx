@@ -1,5 +1,8 @@
+declare module "*.css";
+
 import GlassRipple from "@/components/ui/glass-ripple";
 import { CartProvider } from "@/context/cart-context";
+import { LenisProvider } from "@/context/lenis-context";
 import { ThemeProvider } from "@/provider/ThemeProvider";
 import { X } from "lucide-react";
 import type { Metadata } from "next";
@@ -11,7 +14,6 @@ const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -40,10 +42,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <CartProvider>
-            <GlassRipple />
-            {children}
-          </CartProvider>
+          <LenisProvider>
+            <CartProvider>
+              <GlassRipple />
+              {children}
+            </CartProvider>
+          </LenisProvider>
           <Toaster
             position="top-right"
             richColors

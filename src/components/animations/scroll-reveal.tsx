@@ -1,49 +1,45 @@
-"use client";
+"use client"
 
-import { useEffect, useRef, ReactNode } from "react";
-import { cn } from "@/lib/utils";
+// Replaces the old CSS-based scroll-reveal.tsx
+// Now powered by GSAP + the useGsapReveal hook
+// Drop-in replacement — same props API, better animation quality
+
+import { useGsapReveal } from "@/hooks/use-gsap-reveal"
+import { cn } from "@/lib/utils"
+import type { ReactNode } from "react"
 
 interface ScrollRevealProps {
-  children: ReactNode;
-  className?: string;
-  delay?: number; // ms
+  children: ReactNode
+  className?: string
+  preset?: "fade-up" | "fade-in" | "slide-left" | "slide-right" | "scale-up"
+  stagger?: number
+  duration?: number
+  start?: string
+  // If true, animates the wrapper itself instead of its children
+  self?: boolean
 }
 
-export function ScrollReveal({ children, className, delay = 0 }: ScrollRevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            el.style.opacity = "1";
-            el.style.transform = "translateY(0px)";
-          }, delay);
-          observer.unobserve(el); // fire once
-        }
-      },
-      { threshold: 0.12 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [delay]);
+export function ScrollReveal({
+  children,
+  className,
+  preset = "fade-up",
+  stagger = 0.08,
+  duration = 0.8,
+  start = "top 85%",
+  self = false,
+}: ScrollRevealProps) {
+  const ref = useGsapReveal<HTMLDivElement>({
+    // If self=true, animate the div itself; otherwise animate its children
+    selector: self ? undefined : ":scope > *",
+    preset,
+    stagger,
+    duration,
+    start,
+  })
 
   return (
-    <div
-      ref={ref}
-      className={cn(className)}
-      style={{
-        opacity: 0,
-        transform: "translateY(40px)",
-        transition: "opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
-      }}
-    >
+    <div ref={ref} className={cn("w-full", className)}>
       {children}
     </div>
-  );
+  )
 }
