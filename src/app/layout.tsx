@@ -1,5 +1,3 @@
-declare module "*.css";
-
 import GlassRipple from "@/components/ui/glass-ripple";
 import { CartProvider } from "@/context/cart-context";
 import { LenisProvider } from "@/context/lenis-context";
