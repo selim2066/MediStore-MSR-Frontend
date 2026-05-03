@@ -29,6 +29,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  Shield,
   ShoppingCart,
   User,
   X,
@@ -80,7 +81,7 @@ const getNavLinks = (role?: Role): MenuItem[] => [
   },
   { title: "Blog", url: "/blog" },
   { title: "About", url: "/about" },
-  { title: "Help", url: "/help" },
+  { title: "Privacy", url: "/privacy" },
 ];
 
 /* ─── Progress Bar ───────────────────────────────────────────── */
@@ -680,7 +681,7 @@ const Navbar = ({ className }: NavbarProps) => {
 /* ─── Mobile Nav Link ────────────────────────────────────────── */
 const MOBILE_ICONS: Record<string, React.ReactNode> = {
   Blog: <BookOpen className="h-4 w-4" />,
-  Help: <HelpCircle className="h-4 w-4" />,
+  Privacy: <Shield className="h-4 w-4" />,
 };
 
 function MobileNavLink({
