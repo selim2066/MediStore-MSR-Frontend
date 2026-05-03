@@ -2,6 +2,7 @@
 
 import { Footer } from "@/components/layout/footer"
 import { Navbar } from "@/components/layout/navbar1"
+import { BackgroundEffects } from "@/components/ui/background-effects"
 import { CartProvider } from "@/context/cart-context"
 
 export default function CommonLayout({
@@ -13,7 +14,8 @@ export default function CommonLayout({
     <CartProvider>
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1">
+        <BackgroundEffects />
+        <main className="flex-1 relative z-10">
           {children}
         </main>
         <Footer />

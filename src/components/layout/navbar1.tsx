@@ -53,15 +53,15 @@ interface NavbarProps {
 // Update-1 requirement: 4 routes logged-out, 6 routes logged-in
 
 const LOGGED_OUT_LINKS: MenuItem[] = [
-  { title: "Home",  url: "/" },
-  { title: "Shop",  url: "/shop" },
-  { title: "Blog",  url: "/blog" },
+  { title: "Home", url: "/" },
+  { title: "Shop", url: "/shop" },
+  { title: "Blog", url: "/blog" },
   { title: "About", url: "/about" },
 ];
 
 const getNavLinks = (role?: Role): MenuItem[] => [
-  { title: "Home",  url: "/" },
-  { title: "Shop",  url: "/shop" },
+  { title: "Home", url: "/" },
+  { title: "Shop", url: "/shop" },
   {
     title: "Orders",
     url:
@@ -71,9 +71,9 @@ const getNavLinks = (role?: Role): MenuItem[] => [
           ? "/seller/orders"
           : "/orders",
   },
-  { title: "Blog",  url: "/blog" },
+  { title: "Blog", url: "/blog" },
   { title: "About", url: "/about" },
-  { title: "Help",  url: "/help" },
+  { title: "Help", url: "/help" },
 ];
 
 /* ─── Progress Bar ───────────────────────────────────────────── */
@@ -160,7 +160,10 @@ function NavAvatar({
       <img
         src={image}
         alt={name}
-        className={cn(dim, "rounded-full object-cover ring-2 ring-emerald-500/30")}
+        className={cn(
+          dim,
+          "rounded-full object-cover ring-2 ring-emerald-500/30",
+        )}
       />
     );
   }
@@ -195,7 +198,12 @@ function NavLink({ item }: { item: MenuItem }) {
         <motion.span
           layoutId="nav-active-shadow"
           className="absolute inset-0 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/15"
-          transition={{ type: "spring", stiffness: 380, damping: 34, mass: 0.8 }}
+          transition={{
+            type: "spring",
+            stiffness: 380,
+            damping: 34,
+            mass: 0.8,
+          }}
         />
       )}
 
@@ -208,8 +216,8 @@ function NavLink({ item }: { item: MenuItem }) {
         className={cn(
           "relative z-10 transition-colors duration-200 font-medium",
           isActive
-            ? "text-emerald-600 dark:text-emerald-400"
-            : "text-muted-foreground group-hover:text-foreground",
+            ? "text-amber-500 dark:text-violet-400"
+            : "text-green-300 dark:text-muted-foreground group-hover:text-gray-900 dark:group-hover:text-foreground",
         )}
       >
         {item.title}
@@ -259,13 +267,15 @@ const Navbar = ({ className }: NavbarProps) => {
   };
 
   const getDashboardLink = () => {
-    if (role === "SELLER") return { href: "/seller/dashboard", label: "Seller Dashboard" };
-    if (role === "ADMIN")  return { href: "/admin",            label: "Admin Panel" };
+    if (role === "SELLER")
+      return { href: "/seller/dashboard", label: "Seller Dashboard" };
+    if (role === "ADMIN") return { href: "/admin", label: "Admin Panel" };
     return null;
   };
 
   const dashboardLink = getDashboardLink();
-  const ordersUrl = navLinks.find((l) => l.title === "Orders")?.url ?? "/orders";
+  const ordersUrl =
+    navLinks.find((l) => l.title === "Orders")?.url ?? "/orders";
 
   return (
     <>
@@ -288,20 +298,25 @@ const Navbar = ({ className }: NavbarProps) => {
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-2">
           <div className="flex h-16 items-center justify-between gap-4">
-
             {/* ── Logo ─────────────────────────────────────────── */}
             <Link href="/" className="flex items-center gap-1.5 shrink-0">
               <motion.img
                 src="/msr-logo-1.png"
                 className="h-10"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.08, rotate: -4 }}
+                whileHover={
+                  shouldReduceMotion ? {} : { scale: 1.08, rotate: -4 }
+                }
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
               />
               <motion.span
-                className="font-bold text-xl gradient-text"
-                whileHover={{ opacity: 0.85 }}
-                transition={{ duration: 0.15 }}
+                className="
+    font-bold text-2xl tracking-tight
+    text-emerald-400 dark:text-emerald-400
+    hover:bg-gradient-to-r hover:from-emerald-500 hover:to-teal-500
+    hover:bg-clip-text hover:text-transparent
+    transition-all duration-300
+  "
               >
                 MediStore
               </motion.span>
@@ -335,7 +350,11 @@ const Navbar = ({ className }: NavbarProps) => {
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           exit={{ scale: 0, opacity: 0 }}
-                          transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 22,
+                          }}
                           className="absolute -top-1 -right-1 h-4 w-4 bg-emerald-500 text-white text-[10px] rounded-full flex items-center justify-center font-semibold"
                         >
                           {totalItems > 9 ? "9+" : totalItems}
@@ -389,14 +408,20 @@ const Navbar = ({ className }: NavbarProps) => {
                     <DropdownMenuSeparator />
 
                     <DropdownMenuItem asChild>
-                      <Link href="/profile" className="flex items-center gap-2 cursor-pointer">
+                      <Link
+                        href="/profile"
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
                         <User className="h-3.5 w-3.5" />
                         Profile
                       </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem asChild>
-                      <Link href={ordersUrl} className="flex items-center gap-2 cursor-pointer">
+                      <Link
+                        href={ordersUrl}
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
                         <ShoppingCart className="h-3.5 w-3.5" />
                         My Orders
                       </Link>
@@ -404,7 +429,10 @@ const Navbar = ({ className }: NavbarProps) => {
 
                     {dashboardLink && (
                       <DropdownMenuItem asChild>
-                        <Link href={dashboardLink.href} className="flex items-center gap-2 cursor-pointer">
+                        <Link
+                          href={dashboardLink.href}
+                          className="flex items-center gap-2 cursor-pointer"
+                        >
                           <LayoutDashboard className="h-3.5 w-3.5" />
                           {dashboardLink.label}
                         </Link>
@@ -424,14 +452,15 @@ const Navbar = ({ className }: NavbarProps) => {
                 </DropdownMenu>
               ) : (
                 <div className="flex gap-2">
-                  <Button asChild variant="ghost" size="sm" className="btn-press">
-                    <Link href="/login">Login</Link>
-                  </Button>
                   <Button
                     asChild
+                    variant="ghost"
                     size="sm"
-                    className="btn-brand px-4"
+                    className="btn-press"
                   >
+                    <Link href="/login">Login</Link>
+                  </Button>
+                  <Button asChild size="sm" className="btn-brand px-4">
                     <Link href="/register">Register</Link>
                   </Button>
                 </div>
@@ -443,7 +472,12 @@ const Navbar = ({ className }: NavbarProps) => {
               <ModeToggle />
 
               <motion.div whileTap={{ scale: 0.93 }}>
-                <Button asChild variant="ghost" size="icon" className="relative btn-press">
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="icon"
+                  className="relative btn-press"
+                >
                   <Link href="/cart">
                     <ShoppingCart className="h-4 w-4" />
                     <AnimatePresence>
@@ -453,7 +487,11 @@ const Navbar = ({ className }: NavbarProps) => {
                           initial={{ scale: 0, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           exit={{ scale: 0, opacity: 0 }}
-                          transition={{ type: "spring", stiffness: 500, damping: 22 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 22,
+                          }}
                           className="absolute -top-1 -right-1 h-4 w-4 bg-emerald-500 text-white text-[10px] rounded-full flex items-center justify-center font-semibold"
                         >
                           {totalItems > 9 ? "9+" : totalItems}
@@ -518,7 +556,10 @@ const Navbar = ({ className }: NavbarProps) => {
                     className="border-t p-3 space-y-2 shrink-0"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: navLinks.length * 0.06 + 0.1, duration: 0.3 }}
+                    transition={{
+                      delay: navLinks.length * 0.06 + 0.1,
+                      duration: 0.3,
+                    }}
                   >
                     {session ? (
                       <>
@@ -530,8 +571,12 @@ const Navbar = ({ className }: NavbarProps) => {
                             size="md"
                           />
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold truncate">{session.user.name}</p>
-                            <p className="text-xs text-muted-foreground capitalize">{role?.toLowerCase()}</p>
+                            <p className="text-sm font-semibold truncate">
+                              {session.user.name}
+                            </p>
+                            <p className="text-xs text-muted-foreground capitalize">
+                              {role?.toLowerCase()}
+                            </p>
                           </div>
                         </div>
 
@@ -556,7 +601,10 @@ const Navbar = ({ className }: NavbarProps) => {
                         )}
 
                         <Button
-                          onClick={() => { handleSignOut(); setMobileOpen(false); }}
+                          onClick={() => {
+                            handleSignOut();
+                            setMobileOpen(false);
+                          }}
                           className="w-full mt-1"
                           variant="destructive"
                           size="sm"
@@ -588,8 +636,8 @@ const Navbar = ({ className }: NavbarProps) => {
 
 /* ─── Mobile Nav Link ────────────────────────────────────────── */
 const MOBILE_ICONS: Record<string, React.ReactNode> = {
-  Blog:   <BookOpen  className="h-4 w-4" />,
-  Help:   <HelpCircle className="h-4 w-4" />,
+  Blog: <BookOpen className="h-4 w-4" />,
+  Help: <HelpCircle className="h-4 w-4" />,
 };
 
 function MobileNavLink({
@@ -618,8 +666,8 @@ function MobileNavLink({
         className={cn(
           "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors relative text-sm",
           isActive
-            ? "bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-medium"
-            : "hover:bg-accent/60 text-muted-foreground hover:text-foreground",
+            ? "text-white dark:text-emerald-400"
+            : "text-gray-700 dark:text-muted-foreground group-hover:text-gray-900 dark:group-hover:text-foreground",
         )}
       >
         {/* Active left bar */}
@@ -630,7 +678,9 @@ function MobileNavLink({
           />
         )}
         {icon && (
-          <span className={isActive ? "text-emerald-500" : "text-muted-foreground"}>
+          <span
+            className={isActive ? "text-emerald-500" : "text-muted-foreground"}
+          >
             {icon}
           </span>
         )}

@@ -1,5 +1,6 @@
 //! updated version with more vibrant colors, dynamic icons, and enhanced hover effects
 
+import { BackgroundEffects } from "@/components/ui/background-effects";
 import { categoryService } from "@/service/category.service";
 import {
   Baby,
@@ -117,50 +118,10 @@ export async function CategoriesSection() {
   const categories = data.data;
 
   return (
-    <section className="relative py-10 md:py-14 md:px-10 lg:px-18 bg-[#f0fdf8] dark:bg-[#020810] overflow-hidden">
+    <section className="relative py-10 md:py-14 md:px-10 lg:px-18 bg-[#f0fdf8] dark:bg-[#020810] overflow-hidden -mt-7 z-20">
       {/* ── Background ── */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute inset-0 opacity-[0.635] dark:opacity-0"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.06) 1px,transparent 1px)`,
-            backgroundSize: "77px 77px",
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-0 dark:opacity-100"
-          style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px)`,
-            backgroundSize: "77px 77px",
-          }}
-        />
-        <div
-          className="absolute rounded-full"
-          style={{
-            top: "-10%",
-            left: "-5%",
-            width: 380,
-            height: 380,
-            background:
-              "radial-gradient(circle,rgba(16,185,129,0.12),transparent 70%)",
-            filter: "blur(70px)",
-          }}
-        />
-        <div
-          className="absolute rounded-full"
-          style={{
-            bottom: "-10%",
-            right: "-5%",
-            width: 380,
-            height: 380,
-            background:
-              "radial-gradient(circle,rgba(20,184,166,0.09),transparent 70%)",
-            filter: "blur(70px)",
-          }}
-        />
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
-        <div className="absolute bottom-0 inset-x-0 h-px bg-black/[0.05] dark:bg-white/[0.05]" />
-      </div>
+     
+      
 
       <div className="container mx-auto px-4 relative z-10">
         {/* ── Header ── */}

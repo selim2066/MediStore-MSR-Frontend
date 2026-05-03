@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /* ─────────────────────────── data ─────────────────────────── */
 
@@ -13,7 +13,8 @@ const REVIEWS = [
     text: "MediStore delivered my insulin on time every single month. The interface is clean and ordering is effortless. I never have to worry about running out of medication.",
     stars: 5,
     init: "F",
-    color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400",
+    color:
+      "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400",
   },
   {
     id: 2,
@@ -40,7 +41,8 @@ const REVIEWS = [
     text: "Managing a chronic condition means I order every month. MediStore has never let me down — right dose, right brand, right time. Absolutely dependable service.",
     stars: 5,
     init: "M",
-    color: "bg-violet-100 text-violet-700 dark:bg-violet-950/60 dark:text-violet-400",
+    color:
+      "bg-violet-100 text-violet-700 dark:bg-violet-950/60 dark:text-violet-400",
   },
   {
     id: 5,
@@ -49,7 +51,8 @@ const REVIEWS = [
     text: "My children set this up for me and I love it. Very easy to use, medicines arrive properly packaged and on time. I trust MediStore completely for my daily needs.",
     stars: 5,
     init: "N",
-    color: "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400",
+    color:
+      "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400",
   },
   {
     id: 6,
@@ -65,7 +68,7 @@ const REVIEWS = [
 const STATS = [
   { value: "4.9★", label: "Avg Rating" },
   { value: "12k+", label: "Customers" },
-  { value: "98%",  label: "Satisfaction" },
+  { value: "98%", label: "Satisfaction" },
 ];
 
 /* ─────────────────────────── sub-components ─────────────────────────── */
@@ -79,9 +82,7 @@ function Stars({ count }: { count: number }) {
           viewBox="0 0 20 20"
           fill="currentColor"
           className={`w-[15px] h-[15px] ${
-            i < count
-              ? "text-amber-400"
-              : "text-slate-200 dark:text-slate-700"
+            i < count ? "text-amber-400" : "text-slate-200 dark:text-slate-700"
           }`}
         >
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -221,7 +222,7 @@ export function TestimonialsSection() {
       startAuto();
       setTimeout(() => setIsAnimating(false), 420);
     },
-    [isAnimating, maxIndex, startAuto]
+    [isAnimating, maxIndex, startAuto],
   );
 
   const goTo = (i: number) => {
@@ -242,47 +243,49 @@ export function TestimonialsSection() {
 
   return (
     <section className="relative py-20 overflow-hidden bg-[#f0fdf8] dark:bg-[#020810]">
-
-    {/* ── Square grid — light ── */}
-    <div
-      className="absolute inset-0 opacity-[0.635] dark:opacity-0"
-      style={{
-        backgroundImage: `
+      {/* ── Square grid — light ── */}
+      <div
+        className="absolute inset-0 opacity-[0.635] dark:opacity-0"
+        style={{
+          backgroundImage: `
           linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
           linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)
         `,
-        backgroundSize: "77px 77px",
-      }}
-    />
+          backgroundSize: "77px 77px",
+        }}
+      />
 
-    {/* ── Square grid — dark ── */}
-    <div
-      className="absolute inset-0 opacity-0 dark:opacity-100"
-      style={{
-        backgroundImage: `
+      {/* ── Square grid — dark ── */}
+      <div
+        className="absolute inset-0 opacity-0 dark:opacity-100"
+        style={{
+          backgroundImage: `
           linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
           linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)
         `,
-        backgroundSize: "77px 77px",
-      }}
-    />
+          backgroundSize: "77px 77px",
+        }}
+      />
 
-    {/* ── Glow blobs ── */}
-    <div
-      className="absolute top-[-10%] left-[-5%] w-[420px] h-[420px] rounded-full blur-[90px] pointer-events-none"
-      style={{ background: "radial-gradient(circle, rgba(16,185,129,0.14), transparent 70%)" }}
-    />
-    <div
-      className="absolute bottom-[-10%] right-[-5%] w-[420px] h-[420px] rounded-full blur-[90px] pointer-events-none"
-      style={{ background: "radial-gradient(circle, rgba(20,184,166,0.12), transparent 70%)" }}
-    />
+      {/* ── Glow blobs ── */}
+      <div
+        className="absolute top-[-10%] left-[-5%] w-[420px] h-[420px] rounded-full blur-[90px] pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(16,185,129,0.14), transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute bottom-[-10%] right-[-5%] w-[420px] h-[420px] rounded-full blur-[90px] pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(20,184,166,0.12), transparent 70%)",
+        }}
+      />
 
-    {/* ── Top edge line ── */}
-    <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
-
+      {/* ── Top edge line ── */}
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
         {/* ── Section header ── */}
         <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-5">
@@ -314,7 +317,6 @@ export function TestimonialsSection() {
 
         {/* ── Carousel ── */}
         <div className="relative">
-
           {/* Viewport */}
           <div
             ref={viewportRef}
@@ -412,32 +414,6 @@ export function TestimonialsSection() {
             />
           ))}
         </div>
-
-        {/* ── Stats row ── */}
-        <div className="mt-16 grid grid-cols-3 gap-4 max-w-lg mx-auto">
-          {STATS.map((s) => (
-            <div
-              key={s.label}
-              className="
-                text-center py-5 px-4
-                bg-white/80 dark:bg-slate-900/70
-                border border-slate-200/80 dark:border-slate-700/50
-                rounded-2xl backdrop-blur-sm
-                hover:border-emerald-200 dark:hover:border-emerald-800
-                hover:-translate-y-0.5
-                transition-all duration-200
-              "
-            >
-              <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400 leading-none">
-                {s.value}
-              </p>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mt-2">
-                {s.label}
-              </p>
-            </div>
-          ))}
-        </div>
-
       </div>
     </section>
   );

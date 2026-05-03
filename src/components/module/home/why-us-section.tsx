@@ -958,7 +958,7 @@ export function WhyUsSection() {
               linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
               linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)
             `,
-            backgroundSize: "77px 77px",
+            backgroundSize: "177px 177px",
           }}
         />
         <div
@@ -985,7 +985,7 @@ export function WhyUsSection() {
               "radial-gradient(circle, rgba(20,184,166,0.12), transparent 70%)",
           }}
         />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
+       
 
         {/* ── Content ─────────────────────────────────────────────────── */}
         <div className="container mx-auto px-4 relative z-10">
