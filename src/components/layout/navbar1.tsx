@@ -42,7 +42,7 @@ import dynamic from "next/dynamic";
 
 const ModeToggle = dynamic(
   () => import("./modeToggle").then((m) => m.ModeToggle),
-  { ssr: false }
+  { ssr: false },
 );
 
 /* ─── Types ──────────────────────────────────────────────────── */
@@ -294,7 +294,7 @@ const Navbar = ({ className }: NavbarProps) => {
           className,
         )}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-2">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-0">
           <div className="flex h-16 items-center justify-between gap-4">
             {/* ── Logo ─────────────────────────────────────────── */}
             <Link href="/" className="flex items-center gap-1.5 shrink-0">
@@ -329,9 +329,7 @@ const Navbar = ({ className }: NavbarProps) => {
 
             {/* ── Desktop right ────────────────────────────────── */}
             <div className="hidden lg:flex items-center gap-2">
-              
-                <ModeToggle />
-              
+              <ModeToggle />
 
               {/* Cart */}
               <motion.div whileTap={{ scale: 0.93 }}>
@@ -451,18 +449,61 @@ const Navbar = ({ className }: NavbarProps) => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <div className="flex gap-2">
-                  <Button
-                    asChild
-                    variant="ghost"
-                    size="sm"
-                    className="btn-press"
-                  >
-                    <Link href="/login">Login</Link>
+                <div>
+
+                  <Button asChild size="lg" className="p-0 mx-2">
+                    <Link href="/login">
+                      <div
+                        className="
+        relative group px-5 py-2.5 rounded-xl
+        bg-white/5 backdrop-blur-xl
+        border border-white/20
+        text-white text-sm font-semibold
+        overflow-hidden
+        transition-all duration-300
+        hover:scale-[1.04]
+      "
+                      >
+                        {/* ✨ animated glow */}
+                        <div
+                          className="
+          absolute inset-0 opacity-0 group-hover:opacity-100
+          transition duration-300
+        "
+                          style={{
+                            background:
+                              "radial-gradient(circle at 50% 50%, rgba(16,185,129,0.25), transparent 70%)",
+                          }}
+                        />
+
+                        {/* 🔥 gradient border glow */}
+                        <div
+                          className="
+          absolute inset-0 rounded-xl pointer-events-none
+          opacity-0 group-hover:opacity-100 transition duration-300
+        "
+                          style={{
+                            boxShadow: "0 0 20px rgba(16,185,129,0.4)",
+                          }}
+                        />
+
+                        {/* 🧠 content */}
+                        <span className="relative z-10 flex items-center gap-2">
+                          Login / Register
+                          {/* arrow animation */}
+                          <span className="transform transition-transform duration-300 group-hover:translate-x-1">
+                            →
+                          </span>
+                        </span>
+
+                        {/* ⚡ bottom accent line */}
+                        <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-emerald-400 group-hover:w-full transition-all duration-300" />
+                      </div>
+                    </Link>
                   </Button>
-                  <Button asChild size="sm" className="btn-brand px-4">
+                  {/* <Button asChild size="sm" className="btn-brand px-4">
                     <Link href="/register">Register</Link>
-                  </Button>
+                  </Button> */}
                 </div>
               )}
             </div>
