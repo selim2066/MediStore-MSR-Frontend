@@ -57,9 +57,13 @@
 import { userService } from "@/service/user.service";
 import { redirect } from "next/navigation";
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar";
+import { headers } from "next/headers";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { data: session } = await userService.getSession();
+  const headersList = await headers()
+  const cookieHeader = headersList.get("cookie") || ""
+  
+  const { data: session } = await userService.getSession(cookieHeader);
   if (!session?.user) redirect("/login");
 
   const role = session.user.role;
