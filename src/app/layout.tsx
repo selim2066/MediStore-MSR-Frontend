@@ -47,7 +47,7 @@ export default function RootLayout({
             </CartProvider>
           </LenisProvider>
           <Toaster
-            position="top-right"
+            position="bottom-right"
             richColors
             expand
             visibleToasts={3}

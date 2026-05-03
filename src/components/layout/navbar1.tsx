@@ -36,7 +36,14 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ModeToggle } from "./modeToggle";
+
+//import { ModeToggle } from "./modeToggle";
+import dynamic from "next/dynamic";
+
+const ModeToggle = dynamic(
+  () => import("./modeToggle").then((m) => m.ModeToggle),
+  { ssr: false }
+);
 
 /* ─── Types ──────────────────────────────────────────────────── */
 interface MenuItem {
@@ -322,7 +329,9 @@ const Navbar = ({ className }: NavbarProps) => {
 
             {/* ── Desktop right ────────────────────────────────── */}
             <div className="hidden lg:flex items-center gap-2">
-              <ModeToggle />
+              
+                <ModeToggle />
+              
 
               {/* Cart */}
               <motion.div whileTap={{ scale: 0.93 }}>
