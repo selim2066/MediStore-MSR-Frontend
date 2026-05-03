@@ -12,6 +12,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_BACKEND_URL: urlSchema,
+    NEXT_PUBLIC_FRONTEND_URL: urlSchema,
   },
   runtimeEnv: {
     BACKEND_URL: process.env.BACKEND_URL,
@@ -19,6 +20,7 @@ export const env = createEnv({
     AUTH_URL: process.env.AUTH_URL,
     FRONTEND_URL: process.env.FRONTEND_URL,
     NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
+     NEXT_PUBLIC_FRONTEND_URL: process.env.NEXT_PUBLIC_FRONTEND_URL,
   },
 })
 

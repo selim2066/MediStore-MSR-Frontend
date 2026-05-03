@@ -1,10 +1,8 @@
-
-
 import { createAuthClient } from "better-auth/react"
 import { inferAdditionalFields } from "better-auth/client/plugins"
 
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_FRONTEND_URL, // ← changed
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
   plugins: [
     inferAdditionalFields({
       user: {

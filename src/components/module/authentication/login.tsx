@@ -182,6 +182,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { env } from "@/env";
 import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
 import { Eye, EyeOff, Zap } from "lucide-react";
@@ -199,14 +200,14 @@ const formSchema = z.object({
 const DEMO_ACCOUNTS = [
   {
     label: "User",
-    email: "user@medistore.com",
-    password: "user1234",
+    email: "mdselimreza.dev@gmail.com",
+    password: "password1234",
     role: "CUSTOMER",
   },
   {
     label: "Admin",
-    email: "admin@medistore.com",
-    password: "admin1234",
+    email: "mdselimreza2066@gmail.com",
+    password: "admin2066",
     role: "ADMIN",
   },
 ] as const;
@@ -257,9 +258,8 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL:
-          process.env.NEXT_PUBLIC_FRONTEND_URL ??
-          "https://medi-store-msr-frontend.vercel.app",
+  callbackURL: env.NEXT_PUBLIC_FRONTEND_URL,
+  errorCallbackURL: `${env.NEXT_PUBLIC_FRONTEND_URL}/login`,
       });
     } catch {
       toast.error("Google sign-in failed. Please try again.");
