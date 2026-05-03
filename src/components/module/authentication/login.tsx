@@ -253,19 +253,35 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
   };
 
   // ── Google social login ───────────────────────────────────────────────────
+  // const handleGoogle = async () => {
+  //   setSocialLoading("google");
+  //   try {
+  //     await authClient.signIn.social({
+  //       provider: "google",
+  // callbackURL: env.NEXT_PUBLIC_FRONTEND_URL,
+  // errorCallbackURL: `${env.NEXT_PUBLIC_FRONTEND_URL}/login`,
+  //     });
+  //   } catch {
+  //     toast.error("Google sign-in failed. Please try again.");
+  //     setSocialLoading(null);
+  //   }
+  // };
+
   const handleGoogle = async () => {
-    setSocialLoading("google");
-    try {
-      await authClient.signIn.social({
-        provider: "google",
-  callbackURL: env.NEXT_PUBLIC_FRONTEND_URL,
-  errorCallbackURL: `${env.NEXT_PUBLIC_FRONTEND_URL}/login`,
-      });
-    } catch {
-      toast.error("Google sign-in failed. Please try again.");
-      setSocialLoading(null);
-    }
-  };
+  setSocialLoading("google");
+  try {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: typeof window !== "undefined"
+        ? window.location.origin
+        : process.env.NEXT_PUBLIC_FRONTEND_URL ?? "https://medi-store-msr-frontend.vercel.app",
+      errorCallbackURL: `${process.env.NEXT_PUBLIC_FRONTEND_URL ?? "https://medi-store-msr-frontend.vercel.app"}/login`,
+    });
+  } catch {
+    toast.error("Google sign-in failed. Please try again.");
+    setSocialLoading(null);
+  }
+};
 
   return (
     <div className="flex flex-col h-full">

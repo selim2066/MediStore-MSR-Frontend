@@ -1,9 +1,10 @@
 import { createAuthClient } from "better-auth/react"
 import { inferAdditionalFields } from "better-auth/client/plugins"
-import { env } from "@/env"
 
 export const authClient = createAuthClient({
-  baseURL: env.NEXT_PUBLIC_BACKEND_URL,
+  baseURL: typeof window !== "undefined"
+    ? window.location.origin   // uses vercel.app in prod, localhost:3000 locally
+    : process.env.NEXT_PUBLIC_FRONTEND_URL,
   plugins: [
     inferAdditionalFields({
       user: {
