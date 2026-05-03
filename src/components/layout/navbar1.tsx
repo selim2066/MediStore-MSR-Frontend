@@ -183,6 +183,9 @@ function NavAvatar({
 }
 
 /* ─── Desktop NavLink ────────────────────────────────────────── */
+// Only showing UPDATED PARTS (full component logic unchanged)
+
+/* ─── Desktop NavLink ────────────────────────────────────────── */
 function NavLink({ item }: { item: MenuItem }) {
   const pathname = usePathname();
   const isActive =
@@ -197,38 +200,32 @@ function NavLink({ item }: { item: MenuItem }) {
       {isActive && (
         <motion.span
           layoutId="nav-active-shadow"
-          className="absolute inset-0 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/15"
-          transition={{
-            type: "spring",
-            stiffness: 380,
-            damping: 34,
-            mass: 0.8,
-          }}
+          className="absolute inset-0 rounded-lg bg-emerald-500/10"
         />
       )}
 
       {/* Hover background */}
+      {/* navbar text color */}
       {!isActive && (
-        <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-accent/40" />
+        <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-100 dark:bg-accent/40" />
       )}
 
       <span
         className={cn(
-          "relative z-10 transition-colors duration-200 font-medium",
+          "relative z-10 transition-colors duration-200 font-semibold",
           isActive
-            ? "text-amber-500 dark:text-violet-400"
-            : "text-green-300 dark:text-muted-foreground group-hover:text-gray-900 dark:group-hover:text-foreground",
+            ? "text-emerald-600 dark:text-emerald-400"
+            : "text-[#799EFF] dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white",
         )}
       >
         {item.title}
       </span>
 
-      {/* Active underline dot */}
+      {/* Active dot */}
       {isActive && (
         <motion.span
           layoutId="nav-active-dot"
           className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-emerald-500"
-          transition={{ type: "spring", stiffness: 380, damping: 34 }}
         />
       )}
     </Link>
@@ -283,18 +280,12 @@ const Navbar = ({ className }: NavbarProps) => {
 
       <motion.header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-colors duration-300",
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           scrolled
-            ? "bg-background/80 backdrop-blur-xl border-b border-border/60"
+            ? "bg-white/90 dark:bg-background/80 backdrop-blur-xl border-b border-slate-200 dark:border-border/60"
             : "bg-transparent border-b border-transparent",
           className,
         )}
-        animate={{
-          boxShadow: scrolled
-            ? "0 1px 40px 0 rgba(0,0,0,0.08)"
-            : "0 0px 0px 0 rgba(0,0,0,0)",
-        }}
-        transition={{ duration: 0.3 }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-20 py-2">
           <div className="flex h-16 items-center justify-between gap-4">
@@ -312,7 +303,7 @@ const Navbar = ({ className }: NavbarProps) => {
               <motion.span
                 className="
     font-bold text-2xl tracking-tight
-    text-emerald-400 dark:text-emerald-400
+    text-slate-900 dark:text-white
     hover:bg-gradient-to-r hover:from-emerald-500 hover:to-teal-500
     hover:bg-clip-text hover:text-transparent
     transition-all duration-300
@@ -339,7 +330,7 @@ const Navbar = ({ className }: NavbarProps) => {
                   asChild
                   variant="ghost"
                   size="icon"
-                  className="relative btn-press"
+                  className="relative text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-accent"
                 >
                   <Link href="/cart">
                     <ShoppingCart className="h-4 w-4" />
@@ -370,9 +361,9 @@ const Navbar = ({ className }: NavbarProps) => {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <motion.button
-                      whileTap={{ scale: 0.96 }}
                       className="flex items-center gap-2 px-2 py-1 rounded-xl
-                        hover:bg-accent/60 transition-colors duration-200 outline-none"
+    hover:bg-slate-100 dark:hover:bg-accent/60
+    transition-colors duration-200 outline-none"
                     >
                       <NavAvatar
                         name={session.user.name}
@@ -535,7 +526,9 @@ const Navbar = ({ className }: NavbarProps) => {
                   {/* Sheet header */}
                   <SheetHeader className="p-4 border-b shrink-0">
                     <SheetTitle className="flex items-center gap-2">
-                      <span className="gradient-text font-bold">MediStore</span>
+                      <span className="gradient-text text-2xl font-bold">
+                        MediStore
+                      </span>
                     </SheetTitle>
                   </SheetHeader>
 
@@ -666,8 +659,8 @@ function MobileNavLink({
         className={cn(
           "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors relative text-sm",
           isActive
-            ? "text-white dark:text-emerald-400"
-            : "text-gray-700 dark:text-muted-foreground group-hover:text-gray-900 dark:group-hover:text-foreground",
+            ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30"
+            : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-accent",
         )}
       >
         {/* Active left bar */}
