@@ -1,9 +1,27 @@
 "use client";
-import Link from "next/link";
+import { cubicBezier, motion } from "framer-motion";
 import {
-  ShieldCheck, Zap, HeartHandshake, Globe, ArrowRight,
-  FlaskConical, Truck, Users, Star, CheckCircle2,
+  ArrowRight,
+  CheckCircle2,
+  FlaskConical,
+  Globe,
+  HeartHandshake,
+  ShieldCheck,
+  Star,
+  Truck,
+  Users,
+  Zap,
 } from "lucide-react";
+import Link from "next/link";
+
+import Image from "next/image";
+
+type Founder = {
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
+};
 
 // ─── Shared background (matches homepage) ────────────────────────────────────
 function SectionBg({ children }: { children: React.ReactNode }) {
@@ -43,8 +61,16 @@ function Badge({ label }: { label: string }) {
 }
 
 // ─── Section heading ──────────────────────────────────────────────────────────
-function SectionHeading({ pre, highlight, post, sub }: {
-  pre?: string; highlight: string; post?: string; sub?: string;
+function SectionHeading({
+  pre,
+  highlight,
+  post,
+  sub,
+}: {
+  pre?: string;
+  highlight: string;
+  post?: string;
+  sub?: string;
 }) {
   return (
     <div className="text-center mb-12">
@@ -52,11 +78,16 @@ function SectionHeading({ pre, highlight, post, sub }: {
         {pre && <span className="text-slate-900 dark:text-white">{pre} </span>}
         <span
           className="bg-clip-text text-transparent"
-          style={{ backgroundImage: "linear-gradient(135deg,#059669,#10b981 50%,#34d399)" }}
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg,#059669,#10b981 50%,#34d399)",
+          }}
         >
           {highlight}
         </span>
-        {post && <span className="text-slate-900 dark:text-white"> {post}</span>}
+        {post && (
+          <span className="text-slate-900 dark:text-white"> {post}</span>
+        )}
       </h2>
       {sub && (
         <p className="mt-3 text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
@@ -76,9 +107,13 @@ function HeroSection() {
         <div
           className="absolute rounded-full"
           style={{
-            top: "10%", left: "50%", transform: "translateX(-50%)",
-            width: 600, height: 600,
-            background: "radial-gradient(circle,rgba(16,185,129,0.18),transparent 70%)",
+            top: "10%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 600,
+            height: 600,
+            background:
+              "radial-gradient(circle,rgba(16,185,129,0.18),transparent 70%)",
             filter: "blur(80px)",
           }}
         />
@@ -86,16 +121,24 @@ function HeroSection() {
         <div
           className="absolute rounded-full"
           style={{
-            top: "30%", left: "-10%", width: 350, height: 350,
-            background: "radial-gradient(circle,rgba(20,184,166,0.12),transparent 70%)",
+            top: "30%",
+            left: "-10%",
+            width: 350,
+            height: 350,
+            background:
+              "radial-gradient(circle,rgba(20,184,166,0.12),transparent 70%)",
             filter: "blur(80px)",
           }}
         />
         <div
           className="absolute rounded-full"
           style={{
-            bottom: "10%", right: "-10%", width: 350, height: 350,
-            background: "radial-gradient(circle,rgba(16,185,129,0.10),transparent 70%)",
+            bottom: "10%",
+            right: "-10%",
+            width: 350,
+            height: 350,
+            background:
+              "radial-gradient(circle,rgba(16,185,129,0.10),transparent 70%)",
             filter: "blur(80px)",
           }}
         />
@@ -110,16 +153,19 @@ function HeroSection() {
           <br />
           <span
             className="bg-clip-text text-transparent"
-            style={{ backgroundImage: "linear-gradient(135deg,#059669,#10b981 45%,#34d399 80%,#6ee7b7)" }}
+            style={{
+              backgroundImage:
+                "linear-gradient(135deg,#059669,#10b981 45%,#34d399 80%,#6ee7b7)",
+            }}
           >
             Reimagined.
           </span>
         </h1>
 
         <p className="text-base md:text-lg text-slate-500 dark:text-slate-400 max-w-xl mx-auto leading-relaxed mb-10">
-          MediStore was built to solve a real problem — getting authentic, affordable medicine
-          quickly and reliably across Bangladesh. We are the bridge between verified pharmacies
-          and the people who need them most.
+          MediStore was built to solve a real problem — getting authentic,
+          affordable medicine quickly and reliably across Bangladesh. We are the
+          bridge between verified pharmacies and the people who need them most.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
@@ -139,7 +185,13 @@ function HeroSection() {
 
         {/* Floating pills */}
         <div className="mt-16 flex flex-wrap justify-center gap-3">
-          {["DGDA Compliant", "50k+ Patients", "500+ Pharmacies", "2–4 Day Delivery", "COD Available"].map((tag) => (
+          {[
+            "DGDA Compliant",
+            "50k+ Patients",
+            "500+ Pharmacies",
+            "2–4 Day Delivery",
+            "COD Available",
+          ].map((tag) => (
             <span
               key={tag}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-white/70 dark:bg-white/[0.05] border border-black/[0.07] dark:border-white/[0.07] text-slate-600 dark:text-slate-300 backdrop-blur-sm"
@@ -162,9 +214,13 @@ function MissionSection() {
         <div
           className="absolute rounded-full"
           style={{
-            top: "50%", right: "-5%", transform: "translateY(-50%)",
-            width: 400, height: 400,
-            background: "radial-gradient(circle,rgba(20,184,166,0.10),transparent 70%)",
+            top: "50%",
+            right: "-5%",
+            transform: "translateY(-50%)",
+            width: 400,
+            height: 400,
+            background:
+              "radial-gradient(circle,rgba(20,184,166,0.10),transparent 70%)",
             filter: "blur(80px)",
           }}
         />
@@ -180,34 +236,49 @@ function MissionSection() {
           {/* Mission */}
           <div className="group relative overflow-hidden rounded-2xl p-7 bg-white/60 dark:bg-white/[0.03] border border-black/[0.07] dark:border-white/[0.07] backdrop-blur-sm hover:border-emerald-400/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/10">
             <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-              style={{ background: "radial-gradient(circle at 50% 100%,rgba(16,185,129,0.08),transparent 70%)" }} />
+            <div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 100%,rgba(16,185,129,0.08),transparent 70%)",
+              }}
+            />
 
             <div className="w-11 h-11 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
               <HeartHandshake className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">Mission</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
+              Mission
+            </h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 leading-[1.8]">
-              To make authentic, affordable medicine accessible to every person in Bangladesh —
-              no matter where they live. We connect patients with verified pharmacies through a
-              seamless, trustworthy digital platform.
+              To make authentic, affordable medicine accessible to every person
+              in Bangladesh — no matter where they live. We connect patients
+              with verified pharmacies through a seamless, trustworthy digital
+              platform.
             </p>
           </div>
 
           {/* Vision */}
           <div className="group relative overflow-hidden rounded-2xl p-7 bg-white/60 dark:bg-white/[0.03] border border-black/[0.07] dark:border-white/[0.07] backdrop-blur-sm hover:border-teal-400/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-teal-500/10">
             <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-teal-400 via-emerald-400 to-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-              style={{ background: "radial-gradient(circle at 50% 100%,rgba(20,184,166,0.08),transparent 70%)" }} />
+            <div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 100%,rgba(20,184,166,0.08),transparent 70%)",
+              }}
+            />
 
             <div className="w-11 h-11 rounded-xl bg-teal-500/10 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
               <Globe className="w-5 h-5 text-teal-600 dark:text-teal-400" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">Vision</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
+              Vision
+            </h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 leading-[1.8]">
-              A Bangladesh where healthcare logistics never delay treatment. We envision a future
-              where every pharmacy is digitally connected and every patient can get the right
-              medicine in hours, not days.
+              A Bangladesh where healthcare logistics never delay treatment. We
+              envision a future where every pharmacy is digitally connected and
+              every patient can get the right medicine in hours, not days.
             </p>
           </div>
         </div>
@@ -216,190 +287,406 @@ function MissionSection() {
   );
 }
 
-// ─── CORE VALUES ──────────────────────────────────────────────────────────────
-const VALUES = [
-  {
-    icon: ShieldCheck,
-    title: "Authenticity First",
-    desc: "Every seller is verified. Every product is checked against DGDA regulations before listing.",
-    color: { icon: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400", border: "hover:border-emerald-400/40", glow: "rgba(16,185,129,0.10)" },
-  },
-  {
-    icon: Zap,
-    title: "Speed & Reliability",
-    desc: "2–4 day nationwide delivery with real-time order tracking and dedicated logistics partners.",
-    color: { icon: "bg-amber-500/10 text-amber-600 dark:text-amber-400", border: "hover:border-amber-400/40", glow: "rgba(245,158,11,0.10)" },
-  },
-  {
-    icon: FlaskConical,
-    title: "Medical Integrity",
-    desc: "We never compromise on quality. Cold-chain storage, tamper-evident packaging, verified expiry dates.",
-    color: { icon: "bg-sky-500/10 text-sky-600 dark:text-sky-400", border: "hover:border-sky-400/40", glow: "rgba(14,165,233,0.10)" },
-  },
-  {
-    icon: HeartHandshake,
-    title: "Patient-Centered",
-    desc: "Every feature we build starts with one question: does this make a patient's life easier?",
-    color: { icon: "bg-rose-500/10 text-rose-600 dark:text-rose-400", border: "hover:border-rose-400/40", glow: "rgba(244,63,94,0.10)" },
-  },
-];
+// ─── CORE VALUES
 
 function ValuesSection() {
+  const container = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20, scale: 0.96 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
+  const VALUES = [
+    {
+      icon: ShieldCheck,
+      title: "Authenticity First",
+      desc: "Verified Sellers. Every product is checked against DGDA regulations before listing.",
+      color: "emerald",
+    },
+    {
+      icon: Zap,
+      title: "Speed & Reliability",
+      desc: "2–4 day nationwide delivery with real-time tracking and logistics partners.",
+      color: "amber",
+    },
+    {
+      icon: FlaskConical,
+      title: "Medical Integrity",
+      desc: "Cold-chain storage, tamper-proof packaging, verified expiry dates always.",
+      color: "sky",
+    },
+    {
+      icon: HeartHandshake,
+      title: "Patient-Centered",
+      desc: "Every feature is designed to improve patient experience and safety.",
+      color: "rose",
+    },
+  ];
   return (
     <section className="relative py-20 md:py-28 bg-[#f0fdf8] dark:bg-[#020810] overflow-hidden">
-      <SectionBg>
-        <div
-          className="absolute rounded-full"
-          style={{
-            bottom: "-5%", left: "50%", transform: "translateX(-50%)",
-            width: 500, height: 300,
-            background: "radial-gradient(ellipse,rgba(16,185,129,0.08),transparent 70%)",
-            filter: "blur(60px)",
-          }}
-        />
-        <div className="absolute top-0 inset-x-0 h-px bg-black/[0.06] dark:bg-white/[0.05]" />
-        <div className="absolute bottom-0 inset-x-0 h-px bg-black/[0.06] dark:bg-white/[0.05]" />
-      </SectionBg>
+      {/* Background glow */}
+      <div className="absolute inset-0">
+        <div className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-emerald-500/10 blur-[80px]" />
+      </div>
 
       <div className="relative z-10 container mx-auto px-4">
-        <div className="text-center mb-12">
-          <Badge label="What We Stand For" />
-          <SectionHeading highlight="Core Values" sub="The principles that guide every decision we make." />
+        {/* Header */}
+        <div className="text-center mb-14">
+          <p className="text-emerald-500 text-xs font-semibold mb-2">
+            What We Stand For
+          </p>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white">
+            Core <span className="text-emerald-500">Values</span>
+          </h2>
+          <p className="text-slate-500 dark:text-slate-400 mt-3 max-w-xl mx-auto text-sm">
+            Principles that shape every decision behind MediStore.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
-          {VALUES.map(({ icon: Icon, title, desc, color }, i) => (
-            <div
-              key={title}
-              className={`group relative overflow-hidden rounded-2xl p-6 bg-white/60 dark:bg-white/[0.03] border border-black/[0.07] dark:border-white/[0.07] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${color.border}`}
-              style={{ transitionDelay: `${i * 50}ms` }}
-            >
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-                style={{ background: `radial-gradient(circle at 50% 100%,${color.glow},transparent 70%)` }}
-              />
-              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {/* GRID */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: false, amount: 0.3 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto"
+        >
+          {VALUES.map(({ icon: Icon, title, desc, color }, i) => {
+            const gradient =
+              color === "emerald"
+                ? "from-emerald-500/20 to-teal-400/20"
+                : color === "amber"
+                  ? "from-amber-500/20 to-yellow-400/20"
+                  : color === "sky"
+                    ? "from-sky-500/20 to-cyan-400/20"
+                    : "from-rose-500/20 to-pink-400/20";
 
-              <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 ${color.icon}`}>
-                <Icon className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2">{title}</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-[1.75]">{desc}</p>
-            </div>
-          ))}
-        </div>
+            const glow =
+              color === "emerald"
+                ? "rgba(16,185,129,0.15)"
+                : color === "amber"
+                  ? "rgba(245,158,11,0.15)"
+                  : color === "sky"
+                    ? "rgba(14,165,233,0.15)"
+                    : "rgba(244,63,94,0.15)";
+
+            return (
+              <motion.div
+                key={title}
+                variants={item}
+                className="group relative"
+              >
+                {/* CARD */}
+                <div className="relative p-6 rounded-2xl border border-black/[0.07] dark:border-white/[0.07] bg-white/60 dark:bg-white/[0.03] backdrop-blur-md transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-emerald-500/10">
+                  {/* GLOW LAYER */}
+                  <div
+                    className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl"
+                    style={{
+                      background: `radial-gradient(circle at 50% 100%, ${glow}, transparent 70%)`,
+                    }}
+                  />
+
+                  {/* TOP LINE */}
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent opacity-0 group-hover:opacity-100 transition" />
+
+                  {/* ICON */}
+                  <div
+                    className={`relative w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-gradient-to-br ${gradient} transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}
+                  >
+                    <Icon className="w-5 h-5 text-slate-700 dark:text-white" />
+                  </div>
+
+                  {/* TEXT */}
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2">
+                    {title}
+                  </h3>
+
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    {desc}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );
 }
 
-// ─── WHAT MAKES US DIFFERENT ──────────────────────────────────────────────────
-const DIFFERENTIATORS = [
-  { icon: ShieldCheck, text: "Every seller is DGDA-licensed and manually verified by our team before going live." },
-  { icon: FlaskConical, text: "Medicine listings require batch numbers, expiry dates, and manufacturer proof." },
-  { icon: Truck, text: "Real-time logistics with a 99.8% on-time delivery success rate nationwide." },
-  { icon: Users, text: "24/7 customer support with dedicated pharmacist consultation via chat." },
-  { icon: Star, text: "Only customers who actually received the product can leave verified reviews." },
-  { icon: Zap, text: "Instant order confirmation and same-day dispatch from pharmacies in major cities." },
-];
+// ─── WHAT MAKES US DIFFERENT ─
 
 function DifferentSection() {
+  const DIFFERENTIATORS = [
+    {
+      icon: ShieldCheck,
+      text: "Every seller is DGDA-licensed and manually verified by our team before going live.",
+    },
+    {
+      icon: FlaskConical,
+      text: "Medicine listings require batch numbers, expiry dates, and manufacturer proof.",
+    },
+    {
+      icon: Truck,
+      text: "Real-time logistics with a 99.8% on-time delivery success rate nationwide.",
+    },
+    {
+      icon: Users,
+      text: "24/7 customer support with dedicated pharmacist consultation via chat.",
+    },
+    {
+      icon: Star,
+      text: "Only customers who actually received the product can leave verified reviews.",
+    },
+    {
+      icon: Zap,
+      text: "Instant order confirmation and same-day dispatch from pharmacies in major cities.",
+    },
+  ];
+
+  const container = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  };
+
+  const item = {
+    hidden: {
+      opacity: 0,
+      y: 18,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: cubicBezier(0.22, 1, 0.36, 1),
+      },
+    },
+  };
   return (
-    <section className="relative py-20 md:py-28 bg-[#f0fdf8] dark:bg-[#020810] overflow-hidden">
-      <SectionBg>
+    <section className="relative py-16 md:py-20 bg-[#f0fdf8] dark:bg-[#020810] overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute inset-0">
         <div
           className="absolute rounded-full"
           style={{
-            top: "20%", left: "-5%", width: 400, height: 400,
-            background: "radial-gradient(circle,rgba(16,185,129,0.10),transparent 70%)",
+            top: "20%",
+            left: "-5%",
+            width: 350,
+            height: 350,
+            background:
+              "radial-gradient(circle,rgba(16,185,129,0.10),transparent 70%)",
             filter: "blur(80px)",
           }}
         />
-      </SectionBg>
+      </div>
 
       <div className="relative z-10 container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-          {/* Left */}
-          <div>
-            <Badge label="Why MediStore" />
-            <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight mb-4">
-              <span className="text-slate-900 dark:text-white">Not just another</span>
-              <br />
-              <span
-                className="bg-clip-text text-transparent"
-                style={{ backgroundImage: "linear-gradient(135deg,#059669,#10b981 50%,#34d399)" }}
-              >
-                medicine app.
-              </span>
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-[1.8] max-w-md">
-              We built MediStore from the ground up to address the gaps in Bangladesh&apos;s pharmaceutical
-              supply chain. Every feature is purpose-built for patients, caregivers, and healthcare providers.
-            </p>
-          </div>
+        <div className="grid lg:grid-cols-2 gap-10 items-center max-w-5xl mx-auto">
+          {/* LEFT (animated slightly delayed) */}
+          <motion.div
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: false, amount: 0.3 }}
+          >
+            <motion.p
+              variants={item}
+              className="text-emerald-500 text-xs font-semibold mb-2"
+            >
+              Why MediStore
+            </motion.p>
 
-          {/* Right — feature list */}
-          <div className="space-y-3">
+            <motion.h2
+              variants={item}
+              className="text-3xl md:text-4xl font-black leading-tight mb-4"
+            >
+              <span className="text-slate-900 dark:text-white">
+                Not just another
+              </span>
+              <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-teal-400">
+                medicine platform
+              </span>
+            </motion.h2>
+
+            <motion.p
+              variants={item}
+              className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-md"
+            >
+              Built to fix real gaps in Bangladesh’s pharmaceutical system —
+              focused on trust, speed, and reliability.
+            </motion.p>
+          </motion.div>
+
+          {/* RIGHT GRID */}
+          <motion.div
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: false, amount: 0.3 }}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+          >
             {DIFFERENTIATORS.map(({ icon: Icon, text }, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="group flex items-start gap-4 p-4 rounded-xl bg-white/60 dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.06] hover:border-emerald-400/40 hover:bg-white/80 dark:hover:bg-white/[0.05] transition-all duration-200 backdrop-blur-sm"
+                variants={item}
+                className="group relative p-4 rounded-xl border border-black/[0.06] dark:border-white/[0.06] bg-white/70 dark:bg-white/[0.03] backdrop-blur-md hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300"
               >
-                <div className="shrink-0 w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                  <Icon className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                {/* glow border effect */}
+                <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 bg-emerald-500/10 blur-xl" />
+
+                <div className="relative flex items-start gap-3">
+                  {/* icon */}
+                  <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-400/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition">
+                    <Icon className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+
+                  {/* text */}
+                  <p className="text-xs leading-[1.6] text-slate-600 dark:text-slate-300">
+                    {text}
+                  </p>
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-300 leading-[1.7]">{text}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── TEAM ─────────────────────────────────────────────────────────────────────
-const TEAM = [
-  { name: "Md Selim Reza", role: "Founder & CEO", initials: "SR", color: "from-emerald-400 to-teal-500" },
-  { name: "Dr. Shafiul Islam", role: "Chief Pharmacist", initials: "FK", color: "from-sky-400 to-blue-500" },
-  { name: "Ismail Opu", role: "Head of Logistics", initials: "RA", color: "from-violet-400 to-purple-500" },
-  { name: "Hasibul Hasan", role: "Customer Experience", initials: "NI", color: "from-rose-400 to-pink-500" },
-];
-
+// ─── TEAM
 function TeamSection() {
+  const FOUNDERS: Founder[] = [
+    {
+      name: "Selim Reza",
+      role: "Founder & Full Stack Developer",
+      bio: "Building MediStore to simplify healthcare access in Bangladesh through modern technology and intelligent systems.",
+      image: "/team/me.jpg",
+    },
+    {
+      name: "Dr. Shafiul Islam",
+      role: "Product Designer",
+      bio: "Crafting intuitive experiences that make medicine discovery simple and human-friendly.",
+      image: "/team/pku.jpg",
+    },
+    {
+      name: "Hasibul Hasan",
+      role: "Backend Engineer",
+      bio: "Designing scalable APIs and secure systems to power the MediStore ecosystem.",
+      image: "/team/hasan.jpg",
+    },
+  ];
   return (
     <section className="relative py-20 md:py-28 bg-[#f0fdf8] dark:bg-[#020810] overflow-hidden">
-      <SectionBg>
+      {/* ───────── BACKGROUND ───────── */}
+      <div className="absolute inset-0">
         <div className="absolute top-0 inset-x-0 h-px bg-black/[0.06] dark:bg-white/[0.05]" />
         <div
           className="absolute rounded-full"
           style={{
-            top: "-5%", right: "-5%", width: 400, height: 400,
-            background: "radial-gradient(circle,rgba(20,184,166,0.10),transparent 70%)",
+            top: "-5%",
+            right: "-5%",
+            width: 400,
+            height: 400,
+            background:
+              "radial-gradient(circle,rgba(16,185,129,0.10),transparent 70%)",
             filter: "blur(80px)",
           }}
         />
-      </SectionBg>
+      </div>
 
       <div className="relative z-10 container mx-auto px-4">
-        <div className="text-center mb-12">
-          <Badge label="The Team" />
-          <SectionHeading highlight="People" pre="The" post="Behind MediStore" sub="A passionate team building the future of healthcare access in Bangladesh." />
+        {/* ───────── HEADER ───────── */}
+        <div className="text-center mb-16">
+          <p className="text-emerald-500 font-semibold text-sm mb-2">
+            Our Team
+          </p>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white">
+            People Behind <span className="text-emerald-500">MediStore</span>
+          </h2>
+          <p className="text-slate-500 dark:text-slate-400 mt-4 max-w-xl mx-auto">
+            A passionate team working to make healthcare more accessible,
+            reliable, and intelligent.
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-4xl mx-auto">
-          {TEAM.map(({ name, role, initials, color }) => (
-            <div
-              key={name}
-              className="group flex flex-col items-center text-center p-6 rounded-2xl bg-white/60 dark:bg-white/[0.03] border border-black/[0.07] dark:border-white/[0.07] backdrop-blur-sm hover:border-emerald-400/40 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300"
-            >
-              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center text-white font-black text-lg shadow-lg mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
-                {initials}
+        {/* ───────── ZIGZAG ───────── */}
+        <div className="flex flex-col gap-24 max-w-6xl mx-auto">
+          {FOUNDERS.map((person, i) => {
+            const reverse = i % 2 !== 0;
+
+            return (
+              <div key={i} className="grid md:grid-cols-2 gap-12 items-center">
+                {/* IMAGE */}
+                <motion.div
+                  initial={{ opacity: 0, x: reverse ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className={reverse ? "md:order-2" : "md:order-1"}
+                >
+                  <div className="relative group rounded-3xl border border-black/[0.07] dark:border-white/[0.07] bg-white/60 dark:bg-white/[0.03] backdrop-blur-sm p-5 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300">
+                    {/* IMAGE WRAPPER (square) */}
+                    <div className="relative w-full max-w-[260px] aspect-square mx-auto rounded-2xl overflow-hidden">
+                      <Image
+                        src={person.image}
+                        alt={person.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition duration-500"
+                      />
+
+                      {/* soft overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition" />
+                    </div>
+
+                    {/* glow */}
+                    <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition duration-300 bg-emerald-500/10 blur-xl" />
+                  </div>
+                </motion.div>
+
+                {/* TEXT */}
+                <motion.div
+                  initial={{ opacity: 0, x: reverse ? 50 : -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className={reverse ? "md:order-1" : "md:order-2"}
+                >
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
+                    {person.name}
+                  </h3>
+
+                  <p className="text-emerald-500 font-semibold text-sm mb-4">
+                    {person.role}
+                  </p>
+
+                  <p className="text-slate-500 dark:text-slate-400 leading-relaxed">
+                    {person.bio}
+                  </p>
+                </motion.div>
               </div>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">{name}</p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 leading-snug">{role}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -415,9 +702,13 @@ function CTASection() {
         <div
           className="absolute rounded-full"
           style={{
-            top: "50%", left: "50%", transform: "translate(-50%,-50%)",
-            width: 600, height: 400,
-            background: "radial-gradient(ellipse,rgba(16,185,129,0.13),transparent 70%)",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+            width: 600,
+            height: 400,
+            background:
+              "radial-gradient(ellipse,rgba(16,185,129,0.13),transparent 70%)",
             filter: "blur(60px)",
           }}
         />
@@ -426,16 +717,22 @@ function CTASection() {
       <div className="relative z-10 container mx-auto px-4 text-center">
         <Badge label="Get Started" />
         <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">
-          <span className="text-slate-900 dark:text-white">Ready to experience </span>
+          <span className="text-slate-900 dark:text-white">
+            Ready to experience{" "}
+          </span>
           <span
             className="bg-clip-text text-transparent"
-            style={{ backgroundImage: "linear-gradient(135deg,#059669,#10b981 50%,#34d399)" }}
+            style={{
+              backgroundImage:
+                "linear-gradient(135deg,#059669,#10b981 50%,#34d399)",
+            }}
           >
             better healthcare?
           </span>
         </h2>
         <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-8 leading-relaxed">
-          Join over 50,000 patients who trust MediStore for authentic, fast medicine delivery across Bangladesh.
+          Join over 50,000 patients who trust MediStore for authentic, fast
+          medicine delivery across Bangladesh.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -461,10 +758,10 @@ export default function AboutPage() {
   return (
     <main>
       <HeroSection />
+      <TeamSection />
       <MissionSection />
       <ValuesSection />
       <DifferentSection />
-      <TeamSection />
       <CTASection />
     </main>
   );

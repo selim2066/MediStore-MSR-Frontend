@@ -61,6 +61,7 @@ export interface Medicine {
   stock: number
   manufacturer: string
   image: string | null
+  images: string[] 
   sellerId: string
   categoryId: string
   createdAt: string

@@ -52,18 +52,18 @@ export const medicineService = {
       //   config.cache = options.cache;
       // }
       // ✅ REPLACE WITH THIS
-const config: RequestInit = {};
+      const config: RequestInit = {};
 
-if (options?.cache === "no-store") {
-  config.cache = "no-store";
-} else {
-  config.next = {
-    tags: ["medicines"],
-    ...(options?.revalidate !== undefined && {
-      revalidate: options.revalidate,
-    }),
-  };
-}
+      if (options?.cache === "no-store") {
+        config.cache = "no-store";
+      } else {
+        config.next = {
+          tags: ["medicines"],
+          ...(options?.revalidate !== undefined && {
+            revalidate: options.revalidate,
+          }),
+        };
+      }
       //console.log("Fetching:", url.toString());
 
       const res = await fetch(url.toString(), config);
@@ -94,28 +94,28 @@ if (options?.cache === "no-store") {
   },
 
   // GET seller's own medicines — private, used in /seller/medicines
- 
-// after
-getSellerMedicines: async (params?: { page?: string; limit?: string }) => {
-  try {
-    const cookieStore = await cookies();
-    const url = new URL(`${env.API_URL}/medicine/seller`);
-    if (params?.page) url.searchParams.set("page", params.page);
-    if (params?.limit) url.searchParams.set("limit", params.limit);
 
-    const res = await fetch(url.toString(), {
-      headers: { Cookie: cookieStore.toString() },
-      next: { tags: ["seller-medicines"] },
-    });
-    const data: ApiResponse<PaginatedResponse<Medicine>> = await res.json();
-    return { data, error: null };
-  } catch (error) {
-    return {
-      data: null,
-      error: { message: "Failed to fetch seller medicines", details: error },
-    };
-  }
-},
+  // after
+  getSellerMedicines: async (params?: { page?: string; limit?: string }) => {
+    try {
+      const cookieStore = await cookies();
+      const url = new URL(`${env.API_URL}/medicine/seller`);
+      if (params?.page) url.searchParams.set("page", params.page);
+      if (params?.limit) url.searchParams.set("limit", params.limit);
+
+      const res = await fetch(url.toString(), {
+        headers: { Cookie: cookieStore.toString() },
+        next: { tags: ["seller-medicines"] },
+      });
+      const data: ApiResponse<PaginatedResponse<Medicine>> = await res.json();
+      return { data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: { message: "Failed to fetch seller medicines", details: error },
+      };
+    }
+  },
 
   createMedicine: async (medicineData: FormData) => {
     try {
@@ -125,7 +125,17 @@ getSellerMedicines: async (params?: { page?: string; limit?: string }) => {
       // Now that image is a Cloudinary URL string, the backend expects plain JSON.
       // Converting FormData → plain object → JSON means Express body-parser
       // handles it correctly and the image field is preserved.
-      const body = Object.fromEntries(medicineData.entries());
+      //const body = Object.fromEntries(medicineData.entries());
+      const body: any = {};
+
+      for (const [key, value] of medicineData.entries()) {
+        if (key === "images") {
+          if (!body.images) body.images = [];
+          body.images.push(value);
+        } else {
+          body[key] = value;
+        }
+      }
 
       const res = await fetch(`${env.API_URL}/medicine`, {
         method: "POST",
@@ -150,7 +160,18 @@ getSellerMedicines: async (params?: { page?: string; limit?: string }) => {
     try {
       const cookieStore = await cookies();
 
-      const body = Object.fromEntries(medicineData.entries());
+      //const body = Object.fromEntries(medicineData.entries());
+
+      const body: any = {};
+
+for (const [key, value] of medicineData.entries()) {
+  if (key === "images") {
+    if (!body.images) body.images = [];
+    body.images.push(value);
+  } else {
+    body[key] = value;
+  }
+}
 
       const res = await fetch(`${env.API_URL}/medicine/${id}`, {
         method: "PUT",

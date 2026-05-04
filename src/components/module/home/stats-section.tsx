@@ -213,7 +213,7 @@ export function StatsSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-16 md:py-20 overflow-hidden bg-[#f0fdf8] dark:bg-[#020810]"
+      className="relative py-16 md:py-20 md:px-18 overflow-hidden bg-[#f0fdf8] dark:bg-[#020810]"
     >
       {/* ── Background system ── */}
       <div className="absolute inset-0 pointer-events-none">
