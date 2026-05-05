@@ -205,6 +205,12 @@ const DEMO_ACCOUNTS = [
     role: "CUSTOMER",
   },
   {
+    label: "Seller",
+    email: "selimrezaibnal@gmail.com",
+    password: "password1234",
+    role: "SELLER",
+  },
+  {
     label: "Admin",
     email: "mdselimreza2066@gmail.com",
     password: "admin2066",
