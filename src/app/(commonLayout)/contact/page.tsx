@@ -120,10 +120,10 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen py-20 bg-[#f0fdf8] dark:bg-[#020810]">
+    <main className="min-h-screen py-12 md:py-20 bg-[#f0fdf8] dark:bg-[#020810]">
 
       {/* HERO */}
-      <section className="relative overflow-hidden pt-24 pb-16 px-4">
+      <section className="relative overflow-hidden pt-16 md:pt-24 pb-10 md:pb-16 px-4">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-400/10 dark:bg-emerald-500/5 rounded-full blur-3xl" />
         </div>
@@ -143,20 +143,20 @@ export default function ContactPage() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Get in <span className="text-emerald-500">Touch</span>
           </h1>
 
-          <p className="text-gray-500 dark:text-gray-400 text-lg max-w-xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
             Have a question about your order, a medicine, or your account?
           </p>
         </motion.div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 pb-24">
+      <div className="max-w-6xl mx-auto px-4 pb-20">
 
         {/* INFO CARDS */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 my-10 md:my-12">
           {INFO_CARDS.map((card, i) => (
             <motion.div
               key={card.label}
@@ -165,17 +165,10 @@ export default function ContactPage() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: false, amount: 0.3 }}
-              className={`
-                p-4 rounded-2xl flex flex-col items-center justify-center gap-2 border
-                ${card.border} ${card.bg}
-                transition-all duration-300
-                hover:scale-[1.03]
-                hover:shadow-lg hover:shadow-emerald-500/10
-                hover:border-emerald-400/40
-              `}
+              className={`p-3 md:p-4 rounded-2xl flex flex-col items-center justify-center gap-2 border ${card.border} ${card.bg}`}
             >
               <card.icon className={`w-5 h-5 ${card.color}`} />
-              <p className="text-sm font-semibold text-center">
+              <p className="text-xs sm:text-sm font-semibold text-center">
                 {card.value}
               </p>
             </motion.div>
@@ -183,47 +176,42 @@ export default function ContactPage() {
         </div>
 
         {/* GRID */}
-        <div className="grid md:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8">
 
           {/* FORM */}
           <div className="md:col-span-3 relative">
-
             <motion.div
               initial="hidden"
               whileInView="show"
               viewport={{ once: false, amount: 0.25 }}
               variants={fadeUp}
               custom={1}
-              className="relative backdrop-blur-xl bg-white/60 dark:bg-white/[0.04] border border-white/20 dark:border-white/10 rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.08)]"
+              className="relative backdrop-blur-xl bg-white/60 dark:bg-white/[0.04] border border-white/20 dark:border-white/10 rounded-3xl p-5 sm:p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.08)]"
             >
-              <div className="flex items-center justify-between mb-8">
+
+              <div className="flex items-center justify-between mb-6 md:mb-8">
                 <div>
                   <p className="text-xs text-emerald-500 font-medium uppercase">
                     Contact Identity
                   </p>
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white">
                     Tell us who you are
                   </h2>
                 </div>
 
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                  <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                  <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
                 </div>
               </div>
 
               {/* INPUTS */}
-              <div className="space-y-5">
-
+              <div className="space-y-4 md:space-y-5">
                 <input
                   name="name"
                   value={form.name}
                   onChange={handleChange}
                   placeholder="Full Name"
-                  className="w-full px-4 py-3 rounded-xl bg-white/70 dark:bg-white/[0.03]
-                  border border-white/20 dark:border-white/10
-                  transition-all duration-300
-                  hover:scale-[1.01] hover:border-emerald-300/40
-                  focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 outline-none"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/70 dark:bg-white/[0.03] border border-white/20 dark:border-white/10 outline-none"
                 />
 
                 <input
@@ -231,46 +219,38 @@ export default function ContactPage() {
                   value={form.email}
                   onChange={handleChange}
                   placeholder="Email"
-                  className="w-full px-4 py-3 rounded-xl bg-white/70 dark:bg-white/[0.03]
-                  border border-white/20 dark:border-white/10
-                  transition-all duration-300
-                  hover:scale-[1.01] hover:border-blue-300/40
-                  focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/70 dark:bg-white/[0.03] border border-white/20 dark:border-white/10 outline-none"
                 />
 
                 <select
                   name="topic"
                   value={form.topic}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-white/70 dark:bg-white/[0.05]
-                  border border-white/20 dark:border-white/10
-                  transition-all duration-300
-                  hover:scale-[1.01] hover:border-cyan-300/40
-                  focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 outline-none"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/70 dark:bg-white/[0.05] border border-white/20 dark:border-white/10 outline-none"
                 >
                   <option value="">Select topic</option>
                   {TOPICS.map((t) => (
                     <option key={t} value={t}>{t}</option>
                   ))}
                 </select>
-
               </div>
 
               {/* CTA */}
-              <div className="mt-8 flex justify-between items-center">
-                <div className="text-xs text-gray-500">
+              <div className="mt-6 md:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-between sm:items-center">
+                <div className="text-xs text-gray-500 text-center sm:text-left">
                   Secure • Encrypted
                 </div>
 
                 <button
                   onClick={handleSubmit}
                   disabled={status === "sending"}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white
-                  transition-all duration-300
-                  hover:scale-[1.03] hover:shadow-lg hover:shadow-emerald-500/30
-                  active:scale-[0.97]"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white"
                 >
-                  {status === "sending" ? "Sending..." : status === "sent" ? "Sent ✓" : "Send Message"}
+                  {status === "sending"
+                    ? "Sending..."
+                    : status === "sent"
+                    ? "Sent ✓"
+                    : "Send Message"}
                 </button>
               </div>
 
@@ -278,7 +258,7 @@ export default function ContactPage() {
           </div>
 
           {/* LINKS */}
-          <div className="md:col-span-2 space-y-4">
+          <div className="md:col-span-2 space-y-3 md:space-y-4">
             {links.map((item, i) => (
               <motion.div
                 key={item.label}
@@ -289,20 +269,12 @@ export default function ContactPage() {
                 viewport={{ once: false, amount: 0.25 }}
               >
                 <Link href={item.href} className="block">
-                  <div className="p-4 rounded-2xl bg-white/80 dark:bg-white/5
-                    border border-slate-200/70 dark:border-white/10
-                    transition-all duration-300
-                    hover:scale-[1.02]
-                    hover:-translate-y-1
-                    hover:shadow-lg hover:shadow-emerald-500/10
-                    hover:border-emerald-400/40">
+                  <div className="p-3 md:p-4 rounded-2xl bg-white/80 dark:bg-white/5 border border-slate-200/70 dark:border-white/10">
                     <div className="flex justify-between items-center">
-                      <span className="text-slate-700 dark:text-slate-200">
+                      <span className="text-sm md:text-base text-slate-700 dark:text-slate-200">
                         {item.label}
                       </span>
-                      <span className="text-emerald-500 group-hover:translate-x-1 transition-transform">
-                        →
-                      </span>
+                      <span className="text-emerald-500">→</span>
                     </div>
                   </div>
                 </Link>
