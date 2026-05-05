@@ -157,7 +157,7 @@ const Navbar = ({ className }: { className?: string }) => {
                   <button className="flex items-center gap-2">
                     <img
                       src={session.user.image || "/avatar.png"}
-                      className="h-8 w-8 rounded-full"
+                      className="h-10 w-10 rounded-full object-cover ring-3 ring-emerald-500/30"
                     />
                     <ChevronDown className="h-4 w-4" />
                   </button>
