@@ -56,7 +56,7 @@ const footerLinks: Record<string, FooterSection> = {
     title: "Legal",
     links: [
       { label: "Privacy", href: "/privacy" },
-      { label: "Terms", href: "/terms" },
+      { label: "Terms", href: "/privacy" },
     ],
   },
 };

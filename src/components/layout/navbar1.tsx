@@ -25,7 +25,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   BookOpen,
   ChevronDown,
-  HelpCircle,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -81,7 +80,11 @@ const getNavLinks = (role?: Role): MenuItem[] => [
   },
   { title: "Blog", url: "/blog" },
   { title: "About", url: "/about" },
-  { title: "Privacy", url: "/privacy" },
+  { title: "Terms & Privacy", url: "/privacy" },
+  {
+    title: "Contact",
+    url: "/contact",
+  },
 ];
 
 /* ─── Progress Bar ───────────────────────────────────────────── */
@@ -451,7 +454,6 @@ const Navbar = ({ className }: NavbarProps) => {
                 </DropdownMenu>
               ) : (
                 <div>
-
                   <Button asChild size="lg" className="p-0 mx-2">
                     <Link href="/login">
                       <div

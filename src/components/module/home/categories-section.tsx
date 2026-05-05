@@ -231,45 +231,46 @@ export async function CategoriesSection() {
           })}
         </div>
 
-        {/* ── CTA ── */}
-        <div className="text-center mt-8">
-          <Link href="/shop" className="group inline-block">
-            <div
-              className="relative p-[1.5px] rounded-xl transition-all duration-300 group-hover:shadow-lg group-hover:shadow-emerald-500/20"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(16,185,129,0.5), rgba(20,184,166,0.3), rgba(16,185,129,0.5))",
-              }}
-            >
-              <div
-                className="
-          relative flex items-center gap-2
-          px-6 py-2.5 rounded-[11px]
-          bg-[#f0fdf8] dark:bg-[#020810]
-          group-hover:bg-emerald-50/80 dark:group-hover:bg-emerald-950/40
-          transition-all duration-300
-        "
-              >
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors duration-200 tracking-wide">
-                  View all medicines
-                </span>
+       {/* ── CTA ── */}
+<div className="text-center mt-8">
+  <Link href="/shop" className="group inline-block">
+    
+    <div
+      className="
+        relative px-6 py-3 rounded-xl
+        bg-gradient-to-r from-emerald-500 to-teal-500
+        text-white font-medium text-sm
 
-                {/* Arrow — slides right on hover */}
-                <span
-                  className="
-            inline-flex items-center
-            text-emerald-600 dark:text-emerald-400
-            text-sm font-bold
-            translate-x-0 group-hover:translate-x-1.5
-            transition-transform duration-300 ease-out
+        shadow-lg shadow-emerald-500/20
+        hover:shadow-emerald-500/40
+
+        transition-all duration-300
+        active:scale-[0.97]
+        overflow-hidden
+      "
+    >
+      {/* glow layer */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute -inset-10 bg-white/20 blur-2xl" />
+      </div>
+
+      <div className="relative flex items-center justify-center gap-2">
+        <span className="tracking-wide">View all medicines</span>
+
+        <span
+          className="
+            inline-block
+            group-hover:translate-x-1
+            transition-transform duration-300
           "
-                >
-                  →
-                </span>
-              </div>
-            </div>
-          </Link>
-        </div>
+        >
+          →
+        </span>
+      </div>
+    </div>
+
+  </Link>
+</div>
       </div>
     </section>
   );
