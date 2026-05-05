@@ -10,6 +10,7 @@ type Message = {
 }
 
 const SUGGESTED_PROMPTS = [
+  'Assalamu alaikum, what is MediStore?',
   'What medicines do you sell?',
   'How do I place an order?',
   'How can I track my order?',
