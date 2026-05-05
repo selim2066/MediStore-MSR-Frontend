@@ -203,6 +203,10 @@
   border-radius: var(--radius-xl);
 }
 
+.text-stroke {
+  -webkit-text-stroke: 1px #10b981;
+}
+
 .glow-hover::before {
   content: "";
   position: absolute;
